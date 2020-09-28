@@ -1,7 +1,7 @@
 /******************************************************************
-** BaseModule.cs
+** Utility.cs
 ** @Author       : BanMing 
-** @Date         : 2020/9/27 下午6:41:05
+** @Date         : 2020/9/28 下午2:42:16
 ** @Description  : 
 *******************************************************************/
 
@@ -11,7 +11,7 @@ using System;
 
 namespace BMBaseCore
 {
-    public abstract class BaseModule : BaseObject
+    public static partial class Utility
     {
 
     }

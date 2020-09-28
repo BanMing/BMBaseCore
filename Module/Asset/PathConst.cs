@@ -14,5 +14,19 @@ namespace BMBaseCore
     public class PathConst
     {
 
+        public static string AssetBundleDir
+        {
+            get { return $"{Application.streamingAssetsPath}//bundles//"; }
+        }
+
+        public static string AssetBundleManifestPath
+        {
+            get
+            {
+                //Application.platform.
+                //string 
+                return "";
+            }
+        }
     }
 }

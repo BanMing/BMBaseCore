@@ -15,6 +15,10 @@ public class BaseObject
     #endregion
 
     #region Public Method
+    public virtual void Init() { }
+
+    public virtual void Destroy() { }
+
     #endregion
 
     #region Local Method

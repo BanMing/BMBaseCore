@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BMBaseCore
 {
-    public class EditorAssetLoader : IAssetLoader
+    public class EditorAssetLoader : BaseObject, IAssetLoader
     {
         #region Attriube
         #endregion
