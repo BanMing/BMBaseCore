@@ -1,16 +1,15 @@
 /******************************************************************
 ** Utility.CRC32.cs
-** @Author       : BanMing 
+** @Author       : BanMing
 ** @Date         : 2020/9/28 下午2:44:58
-** @Description  : 
+** @Description  :
 *******************************************************************/
 
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.IO;
 
 namespace BMBaseCore
 {
@@ -41,7 +40,7 @@ namespace BMBaseCore
                 return 0 == comparer.Compare(input, hash);
             }
 
-            #endregion
+            #endregion MD5
 
             #region CRC32
 
@@ -82,7 +81,7 @@ namespace BMBaseCore
                 return 0 == comparer.Compare(input, hash);
             }
 
-            #endregion
+            #endregion CRC32
         }
 
         /// <summary>
@@ -100,7 +99,9 @@ namespace BMBaseCore
             private readonly UInt32[] _table;
             private UInt32 _hash;
 
-            public CRC32() : this(DefaultPolynomial, DefaultSeed) { }
+            public CRC32() : this(DefaultPolynomial, DefaultSeed)
+            {
+            }
 
             public CRC32(UInt32 polynomial, UInt32 seed)
             {
@@ -148,7 +149,7 @@ namespace BMBaseCore
                 return ~CalculateHash(InitializeTable(polynomial), seed, buffer, 0, buffer.Length);
             }
 
-            static UInt32[] InitializeTable(UInt32 polynomial)
+            private static UInt32[] InitializeTable(UInt32 polynomial)
             {
                 if (polynomial == DefaultPolynomial && _defaultTable != null)
                     return _defaultTable;
@@ -171,7 +172,7 @@ namespace BMBaseCore
                 return createTable;
             }
 
-            static UInt32 CalculateHash(UInt32[] table, UInt32 seed, IList<byte> buffer, int start, int size)
+            private static UInt32 CalculateHash(UInt32[] table, UInt32 seed, IList<byte> buffer, int start, int size)
             {
                 var hash = seed;
                 for (var i = start; i < start + size; i++)
@@ -179,7 +180,7 @@ namespace BMBaseCore
                 return hash;
             }
 
-            static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
+            private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
             {
                 var result = BitConverter.GetBytes(uint32);
 

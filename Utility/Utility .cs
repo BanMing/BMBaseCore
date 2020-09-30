@@ -1,18 +1,13 @@
 /******************************************************************
 ** Utility.cs
-** @Author       : BanMing 
+** @Author       : BanMing
 ** @Date         : 2020/9/28 下午2:42:16
-** @Description  : 
+** @Description  :
 *******************************************************************/
-
-using UnityEngine;
-using System.Collections;
-using System;
 
 namespace BMBaseCore
 {
     public static partial class Utility
     {
-
     }
 }

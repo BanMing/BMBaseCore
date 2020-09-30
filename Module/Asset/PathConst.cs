@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace BMBaseCore
@@ -17,6 +18,20 @@ namespace BMBaseCore
         public static string AssetBundleDir
         {
             get { return $"{Application.streamingAssetsPath}//bundles//"; }
+        }
+
+        public static string AssetBundleExtension
+        {
+            get
+
+            {
+                
+                //if (Application.platform)
+                //{
+
+                //}
+                return "";
+            }
         }
 
         public static string AssetBundleManifestPath

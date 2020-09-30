@@ -42,5 +42,15 @@ namespace BMBaseCore
         {
             return new Vector3(vector2.x, 0f, vector2.y);
         }
+
+        public static Vector3 Clone(this Vector3 vector3)
+        {
+            return new Vector3(vector3.x, vector3.y, vector3.z);
+        }
+
+        public static Vector2 Clone(this Vector2 vector2)
+        {
+            return new Vector2(vector2.x, vector2.y);
+        }
     }
 }

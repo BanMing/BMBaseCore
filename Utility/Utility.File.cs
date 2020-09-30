@@ -1,11 +1,14 @@
 ﻿/******************************************************************
 ** Utility.File.cs
-** @Author       : BanMing 
+** @Author       : BanMing
 ** @Date         : 9/28/2020 4:37:49 PM
-** @Description  : 
+** @Description  :
 *******************************************************************/
 
+using System;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BMBaseCore
 {
@@ -13,6 +16,9 @@ namespace BMBaseCore
     {
         public static class File
         {
+
+            private static readonly char[] UrlSafeChars = new[] { '.', '_', '-', ';', '/', '?', '\\', ':' };
+
             /// <summary>
             /// check exist path ,if not ,creat
             /// </summary>
@@ -70,7 +76,7 @@ namespace BMBaseCore
                     int fileCount = 0;
                     for (int i = 0; i < files.Length; i++)
                     {
-                        if (!Path.GetExtension(files[i]).EndsWith("meta"))
+                        if (!Path.GetExtension(files[i]).EndsWith("meta") || !Path.GetFileName(files[i]).Equals(".DS_Store"))
                         {
                             fileCount++;
                         }
@@ -85,12 +91,52 @@ namespace BMBaseCore
                 }
                 catch
                 {
-
                     return false;
                 }
-
             }
 
+            private static string TrimPath(string filePath)
+            {
+                // Remove . in filePath
+
+                while (filePath.Contains("/./"))
+                    filePath = filePath.Replace("/./", "/");
+
+                while (filePath.Contains(@"\.\"))
+                    filePath = filePath.Replace(@"\.\", @"\");
+
+                filePath = Regex.Replace(filePath, @"^\.(\/|\\)", string.Empty);
+
+                // Remove .. in filePath
+
+                filePath = Regex.Replace(filePath, @"[^\/\\]+(\/|\\)\.\.(\/|\\)", string.Empty);
+
+                return filePath;
+            }
+
+            internal static string UrlEncode(string url)
+            {
+                var encoder = new UTF8Encoding();
+                var safeline = new StringBuilder(encoder.GetByteCount(url) * 3);
+
+                foreach (var c in url)
+                {
+                    if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) || Array.IndexOf(UrlSafeChars, c) != -1)
+                        safeline.Append(c);
+                    else
+                    {
+                        var bytes = encoder.GetBytes(c.ToString());
+
+                        foreach (var num in bytes)
+                        {
+                            safeline.Append("%");
+                            safeline.Append(num.ToString("X"));
+                        }
+                    }
+                }
+
+                return safeline.ToString();
+            }
         }
     }
 }
