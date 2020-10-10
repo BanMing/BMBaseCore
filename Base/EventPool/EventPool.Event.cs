@@ -7,7 +7,7 @@
 
 namespace BMBaseCore
 {
-    internal sealed partial class EventPool<T> where T : class
+    internal sealed partial class EventPool<T> where T : BaseEventArgs
     {
         /// <summary>
         /// 事件结点

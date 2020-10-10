@@ -1,18 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseEventArgs : MonoBehaviour
+namespace BMBaseCore
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// 事件基类。
+    /// </summary>
+    public abstract class BaseEventArgs : EventArgs, IReference
     {
-        
-    }
+        /// <summary>
+        /// 获取类型编号。
+        /// </summary>
+        public abstract int Id
+        {
+            get;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public virtual void Clear()
+        {
+        }
     }
 }
