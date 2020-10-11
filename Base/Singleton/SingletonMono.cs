@@ -4,31 +4,30 @@
 //// author:BanMing   
 //// des:unity 的单列类
 ////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
-public class SingletonMono<T> : BaseMonoObject where T : BaseMonoObject
+namespace BMBaseCore
 {
-
-    private static T instance;
-    public static T Instance
+    public class SingletonMono<T> : BaseMonoObject where T : BaseMonoObject
     {
-        get
+
+        private static T instance;
+        public static T Instance
         {
-            if (!instance)
+            get
             {
-                instance = FindObjectOfType<T>();
                 if (!instance)
                 {
-                    GameObject go = new GameObject(typeof(T).Name);
-                    instance = go.AddComponent<T>();
-                    instance.Init();
+                    instance = FindObjectOfType<T>();
+                    if (!instance)
+                    {
+                        GameObject go = new GameObject(typeof(T).Name);
+                        instance = go.AddComponent<T>();
+                        instance.Init();
+                    }
                 }
+                return instance;
             }
-            return instance;
         }
     }
 }

@@ -494,5 +494,18 @@ namespace BMBaseCore
             s_LogHelper.Log(GameLogLevel.Fatal, Utility.Text.Format(format, args));
         }
 
+        /// <summary>
+        /// 将指定日志写入文件
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void WriteLogToFile(string msg)
+        {
+            if (s_LogHelper == null)
+            {
+                return;
+            }
+            s_LogHelper.WriteLogToFile(msg);
+        }
+
     }
 }

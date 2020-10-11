@@ -64,7 +64,7 @@ namespace BMBaseCore
         /// <summary>
         /// 轮询事件池
         /// </summary>
-        public void Update()
+        public void Update(float elapseSeconds, float realElapseSeconds)
         {
 
             while (_events.Count > 0)

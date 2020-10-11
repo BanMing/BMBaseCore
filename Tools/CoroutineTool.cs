@@ -9,7 +9,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class CoroutineTool : SingletonMono<CoroutineTool>
+namespace BMBaseCore
 {
+    public sealed class CoroutineTool : SingletonMono<CoroutineTool>
+    {
 
+    }
 }

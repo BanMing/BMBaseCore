@@ -5,8 +5,6 @@
 ** @Description  : 
 *******************************************************************/
 
-using System;
-using System.Collections.Generic;
 
 namespace BMBaseCore
 {
@@ -23,6 +21,12 @@ namespace BMBaseCore
             /// <param name="level">日志等级</param>
             /// <param name="message">日志内容</param>
             void Log(GameLogLevel level, object message);
+
+            /// <summary>
+            /// 将日志内容写入本地文件
+            /// </summary>
+            /// <param name="msg"></param>
+            void WriteLogToFile(string msg);
         }
 
     }

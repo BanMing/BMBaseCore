@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace BMBaseCore
 {
@@ -18,8 +15,9 @@ namespace BMBaseCore
             get;
         }
 
-        public virtual void Clear()
-        {
-        }
+        /// <summary>
+        /// 清理引用
+        /// </summary>
+        public abstract void Clear();
     }
 }

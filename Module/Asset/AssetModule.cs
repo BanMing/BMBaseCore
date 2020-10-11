@@ -49,6 +49,14 @@ namespace BMBaseCore
             }
         }
 
+
+        internal override void Update(float elapseSeconds, float realElapseSeconds) { }
+
+        internal override void Shutdown()
+        {
+            Destroy();
+        }
+
         #endregion
 
         #region Public Method

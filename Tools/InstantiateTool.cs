@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
+using BMBaseCore;
 
 public class InstantiateTool : SingletonMono<InstantiateTool>
 {

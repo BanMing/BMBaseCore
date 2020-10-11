@@ -5,22 +5,23 @@
 //// des:不继承与mono的单例类
 ////////////////////////////////////////////////////////////////////////////////////////////
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
-public class Singleton<T> where T : BaseObject
+namespace BMBaseCore
 {
-    public static T Instance
+    public class Singleton<T> where T : BaseObject
     {
-        get { return Nest.instance; }
-    }
-
-    private class Nest
-    {
-        static Nest()
+        public static T Instance
         {
-            instance.Init();
+            get { return Nest.instance; }
         }
-        internal static readonly T instance = Activator.CreateInstance<T>();
+
+        private class Nest
+        {
+            static Nest()
+            {
+                instance.Init();
+            }
+            internal static readonly T instance = Activator.CreateInstance<T>();
+        }
     }
 }
