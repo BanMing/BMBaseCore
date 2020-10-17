@@ -10,7 +10,15 @@ namespace BMBaseCore
     /// <summary>
     /// 游戏逻辑事件基类。
     /// </summary>
-    public abstract class GameEventArgs : BaseEventArgs
+    public abstract class GameEventArgs<T> : BaseEventArgs where T : BaseEventArgs
     {
+        public BaseEventArgs GetEvent<T>()
+        {
+            return this;
+        }
+
+        public void Fire()
+        {
+        }
     }
 }
