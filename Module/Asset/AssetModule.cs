@@ -5,8 +5,6 @@
 ** @Description  : 
 *******************************************************************/
 
-using UnityEngine;
-using System.Collections;
 using System;
 
 namespace BMBaseCore
@@ -49,8 +47,10 @@ namespace BMBaseCore
             }
         }
 
-
-        internal override void Update(float elapseSeconds, float realElapseSeconds) { }
+        internal override void Update(float elapseSeconds, float realElapseSeconds)
+        {
+            Release();
+        }
 
         internal override void Shutdown()
         {
@@ -80,6 +80,26 @@ namespace BMBaseCore
             }
 
             _assetLoader.LoadAsync<T>(path, callback);
+        }
+
+        public void Release()
+        {
+            _assetLoader?.Release();
+        }
+
+        public T Load<T>(string path, string assetName = null) where T : UnityEngine.Object
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadAsync<T>(string path, string assetName = null, Action<T> callback = null) where T : UnityEngine.Object
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadAsync<T>(string path, Action<T> callback, string assetName = null) where T : UnityEngine.Object
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

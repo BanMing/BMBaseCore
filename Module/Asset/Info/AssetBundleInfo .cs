@@ -6,8 +6,6 @@
 *******************************************************************/
 
 using UnityEngine;
-using System.Collections;
-using System;
 
 namespace BMBaseCore
 {
@@ -19,7 +17,11 @@ namespace BMBaseCore
 
         public AssetBundle bundle;
 
+        public UnityEngine.Object[] assets;
+
         public int refCount;
+
+        public AssetBundleInfo[] dependecies;
 
         #endregion
 
@@ -29,9 +31,38 @@ namespace BMBaseCore
         {
             base.Destroy();
 
+            pathHash = default;
+            refCount = default;
+            dependecies = null;
+            assets = null;
             bundle.Unload(true);
-            pathHash = default(int);
-            refCount = default(int);
+        }
+
+        public T As<T>() where T : UnityEngine.Object
+        {
+            if (assets == null || assets.Length < 1 || assets[0] == null)
+            {
+                return null;
+            }
+            return assets[0] as T;
+        }
+
+        public T GetOneAsset<T>(string assetName) where T : UnityEngine.Object
+        {
+            if (assets == null || assets.Length < 1)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < assets.Length; i++)
+            {
+                if (assets[i].name.Equals(assetName))
+                {
+                    return assets[i] as T;
+                }
+            }
+
+            return null;
         }
 
         #endregion

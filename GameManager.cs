@@ -5,9 +5,9 @@
 ** @Description  : Game Loop Center
 *******************************************************************/
 
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace BMBaseCore
 {
@@ -17,11 +17,13 @@ namespace BMBaseCore
 
         private List<BaseModule> _modules;
 
+        [SerializeField]
+        private GameConfig _gameConfig = new GameConfig();
+
         #endregion
 
         #region Property
-
-        public GameConfig GameConfig { get; private set; }
+        public GameConfig GameConfig { get { return _gameConfig; } }
 
         #endregion
 
@@ -29,14 +31,12 @@ namespace BMBaseCore
 
         private void Awake()
         {
-
-
+            Init();
         }
 
         private void OnDestroy()
         {
-            destroyModules();
-            CoroutineTool.Instance.StopAllCoroutines();
+            DestroyModules();
         }
 
         #endregion
@@ -46,21 +46,24 @@ namespace BMBaseCore
         public override void Init()
         {
             base.Init();
-            initModules();
+
+            _gameConfig.Init();
+
+            //InitModules();
         }
 
         #endregion
 
-        #region Local Method
+        #region Init Method
 
         /// <summary>
         /// init all modules
         /// </summary>
-        private void initModules()
+        private void InitModules()
         {
             if (_modules != null)
             {
-                destroyModules();
+                DestroyModules();
             }
             _modules = new List<BaseModule>();
 
@@ -69,14 +72,16 @@ namespace BMBaseCore
             _modules.Add(assetModule);
 
             // 2. config
-            GameConfig = assetModule.Load<GameConfig>(GameConfig.AssetPath);
 
         }
+        #endregion
+
+        #region Destory Method
 
         /// <summary>
         /// unload all modules
         /// </summary>
-        private void destroyModules()
+        private void DestroyModules()
         {
             if (_modules == null)
             {
@@ -91,6 +96,13 @@ namespace BMBaseCore
             _modules.Clear();
             _modules = null;
         }
+
+        #endregion
+
+        #region Editor Method
+#if UNITY_EDITOR
+
+#endif
 
         #endregion
     }

@@ -1,11 +1,10 @@
 ﻿
 // 2020.9.13 banming
 
-using UnityEngine;
-using System.Collections.Generic;
+using BMBaseCore;
 using System;
 using System.Threading.Tasks;
-using BMBaseCore;
+using UnityEngine;
 
 public class InstantiateTool : SingletonMono<InstantiateTool>
 {

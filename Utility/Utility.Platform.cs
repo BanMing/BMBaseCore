@@ -13,8 +13,8 @@ namespace BMBaseCore
     {
         public static class Platform
         {
-            public static string[] runtimePlatformNames = new string[] { "Android", "IOS", "OSX", "Windows", "Unkonwn" };
-            public static string[] platformAssetBundleExs = new string[] { "a", "i", "o", "w", "u" };
+            public static readonly string[] RuntimePlatformNames = new string[] { "Android", "IOS", "OSX", "Windows", "Unkonwn" };
+            public static readonly string[] PlatformAssetBundleExs = new string[] { "a", "i", "o", "w", "u" };
 
             public static RuntimePlatform CurrentRuntimePlatform
             {
@@ -26,7 +26,7 @@ namespace BMBaseCore
                     return RuntimePlatform.WindowsPlayer;
 #elif UNITY_ANDROID
                     return RuntimePlatform.Android;
-#elif UNITY_ANDROID
+#elif UNITY_IOS
                     return RuntimePlatform.IPhonePlayer;
 #else
                     return RuntimePlatform.OSXPlayer;
@@ -108,21 +108,42 @@ namespace BMBaseCore
             /// <summary>
             /// { "Android", "IOS", "OSX", "Windows", "Unkonwn" };
             /// </summary>
+            public static RuntimePlatform GetRuntimePlatformByIndex(int index)
+            {
+                switch (index)
+                {
+                    case 0:
+                        return RuntimePlatform.Android;
+                    case 1:
+                        return RuntimePlatform.IPhonePlayer;
+                    case 2:
+                        return RuntimePlatform.OSXPlayer;
+                    case 3:
+                        return RuntimePlatform.WindowsPlayer;
+                    default:
+                        return RuntimePlatform.WindowsEditor;
+                }
+            }
+
+            /// <summary>
+            /// { "Android", "IOS", "OSX", "Windows", "Unkonwn" };
+            /// </summary>
             /// <param name="p"></param>
             /// <returns></returns>
             public static string GetRuntimePlatformIndexName(RuntimePlatform p)
             {
-                return runtimePlatformNames[GetRuntimePlatformIndex(p)];
+                return RuntimePlatformNames[GetRuntimePlatformIndex(p)];
             }
 
             /// <summary>
+            /// assetbundle`s extension name of each platform 
             /// { "a", "i", "o", "w", "u" };
             /// </summary>
             /// <param name="p"></param>
             /// <returns></returns>
             public static string GetPlatformAssetBundleEx(RuntimePlatform p)
             {
-                return platformAssetBundleExs[GetRuntimePlatformIndex(p)];
+                return PlatformAssetBundleExs[GetRuntimePlatformIndex(p)];
             }
         }
     }

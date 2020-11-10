@@ -5,8 +5,6 @@
 ** @Description  : define is "BMDEBUG"
 *******************************************************************/
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BMBaseCore

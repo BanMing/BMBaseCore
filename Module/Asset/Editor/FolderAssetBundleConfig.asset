@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e1aaa8414931044b692f35bd05f9ca, type: 3}
+  m_Name: FolderAssetBundleConfig
+  m_EditorClassIdentifier: 
+  folderPaths:
+  - Assets/Res/AnimClips/AudienceAdd
+  - Assets/Res/Atlas/Chat
+  - Assets/Res/AnimClips/Show
+  - Assets/Res/Config/Game
+  - Assets/Res/Atlas/Achievement
+  - Assets/Res/Atlas/CallingCard
+  - Assets/Res/Login
+  version1: 0
+  version2: 0
+  version3: 0

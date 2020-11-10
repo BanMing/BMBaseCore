@@ -5,8 +5,6 @@
 //// des:简单的tcp对应simple-tcp-go
 ////////////////////////////////////////////////////////////////////////////////////////////
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -14,7 +12,6 @@ using UnityEngine;
 
 namespace BMBaseCore
 {
-
     public enum DisType
     {
         Exception,

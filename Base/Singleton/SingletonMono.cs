@@ -29,5 +29,10 @@ namespace BMBaseCore
                 return instance;
             }
         }
+
+        public static bool Exists()
+        {
+            return !FindObjectOfType<T>();
+        }
     }
 }

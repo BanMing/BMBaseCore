@@ -12,13 +12,5 @@ namespace BMBaseCore
     /// </summary>
     public abstract class GameEventArgs : BaseEventArgs
     {
-        public BaseEventArgs GetEvent()
-        {
-            return this;
-        }
-
-        public void Fire()
-        {
-        }
     }
 }

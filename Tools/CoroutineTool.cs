@@ -4,10 +4,6 @@
 //// author:BanMing   
 //// des:unity协成执行工具
 ////////////////////////////////////////////////////////////////////////////////////////////
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace BMBaseCore
 {
