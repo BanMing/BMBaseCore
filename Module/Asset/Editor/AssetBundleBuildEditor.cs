@@ -335,7 +335,7 @@ namespace BMBaseCore
             string[] abs = assetBundleManifest.GetAllAssetBundles();
             for (int i = 0; i < abs.Length; i++)
             {
-                Debug.Log(abs[i]);
+                // Debug.Log(abs[i]);
                 EditorUtility.DisplayProgressBar("Move AssetBundle:", abs[i], 1);
 
                 File.Copy(Path.Combine(destPath, abs[i]), Path.Combine(PathConst.AssetBundleDir, abs[i]));
