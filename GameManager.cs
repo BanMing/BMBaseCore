@@ -15,7 +15,7 @@ namespace BMBaseCore
     {
         #region Attriube
 
-        private List<BaseModule> _modules;
+        private Dictionary<Type, BaseModule> _moduleDict;
 
         [SerializeField]
         private GameConfig _gameConfig = new GameConfig();
@@ -47,9 +47,7 @@ namespace BMBaseCore
         {
             base.Init();
 
-            _gameConfig.Init();
-
-            //InitModules();
+            InitModules();
         }
 
         #endregion
@@ -61,19 +59,21 @@ namespace BMBaseCore
         /// </summary>
         private void InitModules()
         {
-            if (_modules != null)
+            if (_moduleDict != null)
             {
                 DestroyModules();
             }
-            _modules = new List<BaseModule>();
+            _moduleDict = new Dictionary<Type, BaseModule>();
 
             // 1. asset
             AssetModule assetModule = new AssetModule();
-            _modules.Add(assetModule);
+            _moduleDict.Add(typeof(AssetModule), assetModule);
 
             // 2. config
 
         }
+
+
         #endregion
 
         #region Destory Method
@@ -83,20 +83,41 @@ namespace BMBaseCore
         /// </summary>
         private void DestroyModules()
         {
-            if (_modules == null)
+            if (_moduleDict == null)
             {
                 return;
             }
 
-            for (int i = 0; i < _modules.Count; i++)
+            foreach (var item in _moduleDict)
             {
-                _modules[i].Destroy();
+                item.Value.Destroy();
             }
 
-            _modules.Clear();
-            _modules = null;
+
+            _moduleDict.Clear();
+            _moduleDict = null;
         }
 
+        #endregion
+
+        #region Getter
+
+        public T GetMoudle<T>() where T : BaseModule
+        {
+            BaseModule module;
+            _moduleDict.TryGetValue(typeof(T), out module);
+
+            return module.As<T>();
+        }
+
+        #endregion
+
+        #region Setter
+
+        public void SetGameVersion(string version)
+        {
+            _gameConfig.Version = version;
+        }
         #endregion
 
         #region Editor Method

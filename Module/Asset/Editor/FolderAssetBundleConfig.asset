@@ -23,3 +23,6 @@ MonoBehaviour:
   version1: 0
   version2: 0
   version3: 0
+  channels:
+  - name: Local
+    webConfigUrl: https://127.0.0.1

@@ -26,5 +26,15 @@ namespace BMBaseCore
         /// 关闭并清理游戏框架模块
         /// </summary>
         internal abstract void Shutdown();
+
+        internal T As<T>() where T : BaseModule
+        {
+            if (this == null)
+            {
+                return null;
+            }
+
+            return this as T;
+        }
     }
 }

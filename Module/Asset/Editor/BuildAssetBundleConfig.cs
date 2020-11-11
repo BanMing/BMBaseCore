@@ -23,12 +23,36 @@ namespace BMBaseCore
         public int version2;
         public int version3;
 
+        public List<BuildChannel> channels;
+
+        public bool isHotfix;
+
+        public bool isNeedReboot;
+
+        public bool isZipAb;
+
+        public bool isEncryptAb;
+
         public void Check()
         {
             folderPaths.RemoveAll(item =>
             {
                 return item.IndexOf("Assets/") == -1 || string.IsNullOrEmpty(item) || !Directory.Exists(Path.GetFullPath(item));
             });
+        }
+
+        public string[] ToChannelNameString()
+        {
+            if (channels == null || channels.Count < 1)
+            {
+                return new string[] { };
+            }
+            string[] res = new string[channels.Count];
+            for (int i = 0; i < channels.Count; i++)
+            {
+                res[i] = channels[i].name;
+            }
+            return res;
         }
 
         public static BuildAssetBundleConfig Load()

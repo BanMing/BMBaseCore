@@ -1,0 +1,7 @@
+build assetbundle rules:
+1.The config of Folder AssetBundle,the directory does not contain any sub directory.All assets in the folder (Folder of AssetBundle ) will build into one assetbundle.
+2.except the folder of config,other assets each one will build into itself assetbundle.
+3.version: big version,csharp version,resourece version.
+4.big version: project version.
+5.csharp version: increasing one when build a new player.
+6.resource version: increasing one when build assetbuild.

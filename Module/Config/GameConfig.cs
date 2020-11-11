@@ -21,15 +21,12 @@ namespace BMBaseCore
 
         #region Perproty
 
-        public string Version { get; private set; }
+        public string Version { get; set; }
 
         #endregion
 
         #region Public Method
-        public void Init()
-        {
-            //Version = Utility.Text.Format("{0}.{1}.{2}", version1, version2, version3);
-        }
+
         #endregion
     }
 }

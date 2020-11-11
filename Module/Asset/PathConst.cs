@@ -21,21 +21,21 @@ namespace BMBaseCore
         }
 
         /// <summary>
-        ///  directory:  Application.streamingAssetsPath /bundles/
+        ///  directory:  {Application.streamingAssetsPath} /bundles/
         /// </summary>
         public static string AssetBundleDir
         {
             get { return Utility.Text.Format("{0}/bundles/", Application.streamingAssetsPath); }
         }
 
-
+        /// <summary>
+        /// directory:  {Application.streamingAssetsPath} /bundles/{version}
+        /// </summary>
         public static string AssetBundleManifestPath
         {
             get
             {
-                //Application.platform.
-                //string 
-                return "";
+                return Utility.Text.Format("{0}{1}", AssetBundleDir, GameManager.Instance.GameConfig.Version);
             }
         }
 
@@ -50,6 +50,11 @@ namespace BMBaseCore
         public static string FileListName
         {
             get { return "filelist.file"; }
+        }
+
+        public static string FileListPath
+        {
+            get { return Utility.Text.Format("{0}{1}", AssetBundleDir, FileListName); }
         }
     }
 }

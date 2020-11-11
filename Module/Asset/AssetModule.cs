@@ -15,13 +15,13 @@ namespace BMBaseCore
 
         private IAssetLoader _assetLoader;
 
+
         #endregion
 
         #region Life Cycle
 
-        public override void Init()
+        public AssetModule()
         {
-            base.Init();
 
 #if UNITY_EDITOR
             if (GameManager.Instance.GameConfig.isAssertBundle)
@@ -35,7 +35,10 @@ namespace BMBaseCore
 #else
             _assetLoader = new AssetBundleLoader();
 #endif
+
+            
         }
+
 
         public override void Destroy()
         {

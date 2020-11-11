@@ -17,19 +17,19 @@ namespace BMBaseCore
     public class AssetBundleBuildEditor : EditorWindow
     {
         #region Attriube
-        public const string TIPS = @"build assetbundle rules:
-1.The config of Folder AssetBundle,the directory does not contain any sub directory.All assets in the folder (Folder of AssetBundle ) will build into one assetbundle.
-2.except the folder of config,other assets each one will build into itself assetbundle.
-3.version: big version,csharp version,resourece version.
-4.big version: project version.
-5.csharp version: increasing one when build a new player.
-6.resource version: increasing one when build assetbuild.";
 
         private static AssetBundleBuildEditor s_abBuilderWindow;
         private BuildAssetBundleConfig _buildAbConfig;
 
         private int _selectPlatformIndex;
 
+        private int _selectChannelIndex;
+
+        private bool _isShowHotfixConfig;
+        private bool _isShowFolderConfig;
+        private bool _isShowVersionConfig;
+        private bool _isShowChannelConfig;
+        private bool _isShowBuildConfig;
         #endregion
 
         #region Enter
@@ -37,7 +37,7 @@ namespace BMBaseCore
         [MenuItem("Tools/Build AssetBundle")]
         private static void OpenBuildAssetBundleWindow()
         {
-            s_abBuilderWindow = CreateWindow<AssetBundleBuildEditor>();
+            s_abBuilderWindow = CreateWindow<AssetBundleBuildEditor>("AssetBundle Builder");
             s_abBuilderWindow._buildAbConfig = BuildAssetBundleConfig.Load();
             s_abBuilderWindow._selectPlatformIndex = Utility.Platform.GetRuntimePlatformIndex(Utility.Platform.CurrentRuntimePlatform);
 
@@ -50,20 +50,48 @@ namespace BMBaseCore
 
         private void OnGUI()
         {
-            EditorGUILayout.HelpBox(TIPS, MessageType.Error, true);
-            GUILayout.Space(10);
+            DrawBuildRule();
+
+            DrawHotfixConfig();
 
             DrawFolderConfig();
-            GUILayout.Space(10);
 
             DrawVersion();
-            GUILayout.Space(10);
+
+            DrawChannels();
 
             DrawBuildAb();
         }
 
+        private void DrawBuildRule()
+        {
+            GUILayout.Space(10);
+            EditorGUILayout.HelpBox("You must know the rules before building!", MessageType.Error, true);
+            if (GUILayout.Button("read build assetbundle rules"))
+            {
+                Application.OpenURL(Path.GetFullPath(@"Assets\Scripts\BMBaseCore\Module\Asset\Editor\BuildAssetBundleRules.txt"));
+            }
+            GUILayout.Space(10);
+        }
+
+        private void DrawHotfixConfig()
+        {
+            if (!(_isShowHotfixConfig = EditorGUILayout.Foldout(_isShowHotfixConfig, "Hotfix Config"))) { return; }
+
+            _buildAbConfig.isHotfix = EditorGUILayout.ToggleLeft("Is need hotfix ?", _buildAbConfig.isHotfix);
+
+            if (_buildAbConfig.isHotfix)
+            {
+                _buildAbConfig.isNeedReboot = EditorGUILayout.ToggleLeft("Is need reboot after hotfix ?", _buildAbConfig.isNeedReboot);
+            }
+
+            GUILayout.Space(10);
+        }
+
         private void DrawFolderConfig()
         {
+            if (!(_isShowFolderConfig = EditorGUILayout.Foldout(_isShowFolderConfig, "Assetbundle Folder Config"))) { return; }
+
             GUILayout.Box($"Folder AssetBundle:{_buildAbConfig.folderPaths.Count}");
             float windowWith8 = s_abBuilderWindow.position.width / 9;
             for (int i = 0; i < _buildAbConfig.folderPaths.Count; i++)
@@ -105,18 +133,50 @@ namespace BMBaseCore
             }
             GUILayout.EndHorizontal();
 
+            GUILayout.Space(10);
         }
         private void DrawVersion()
         {
+            if (!(_isShowVersionConfig = EditorGUILayout.Foldout(_isShowVersionConfig, "Version Config"))) { return; }
+
             GUILayout.Box(Utility.Text.Format("Version : {0}.{1}.{2}", _buildAbConfig.version1, _buildAbConfig.version2, _buildAbConfig.version3));
 
             _buildAbConfig.version1 = EditorGUILayout.IntField("Big Version:", _buildAbConfig.version1);
             _buildAbConfig.version2 = EditorGUILayout.IntField("CSharp Version:", _buildAbConfig.version2);
             _buildAbConfig.version3 = EditorGUILayout.IntField("Resource Version:", _buildAbConfig.version3);
+
+            GUILayout.Space(10);
+        }
+
+        private void DrawChannels()
+        {
+            if (!_buildAbConfig.isHotfix || !(_isShowChannelConfig = EditorGUILayout.Foldout(_isShowChannelConfig, "Channels Config"))) { return; }
+
+            //GUILayout.BeginHorizontal();
+            {
+                _selectChannelIndex = EditorGUILayout.Popup("Channels :", _selectChannelIndex, _buildAbConfig.ToChannelNameString());
+            }
+            //GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Box("webConfigUrl:");
+
+                _buildAbConfig.channels[_selectChannelIndex].webConfigUrl = GUILayout.TextField(_buildAbConfig.channels[_selectChannelIndex].webConfigUrl);
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
         }
 
         private void DrawBuildAb()
         {
+            if (!(_isShowBuildConfig = EditorGUILayout.Foldout(_isShowBuildConfig, "Build Config"))) { return; }
+
+
+            _buildAbConfig.isZipAb = EditorGUILayout.ToggleLeft("Compress all assetbundles into one file ?", _buildAbConfig.isZipAb);
+            _buildAbConfig.isEncryptAb = EditorGUILayout.ToggleLeft("Encrypt assetbundle?", _buildAbConfig.isEncryptAb);
+
             _selectPlatformIndex = EditorGUILayout.Popup("Build Target:", _selectPlatformIndex, Utility.Platform.RuntimePlatformNames);
             if (GUILayout.Button("Build"))
             {

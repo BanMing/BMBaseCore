@@ -24,7 +24,7 @@ namespace BMBaseCore
         }
 
         #endregion
-       
+
         #region Attriube
 
         private AssetBundleManifest _bundleManifest;
@@ -36,12 +36,20 @@ namespace BMBaseCore
         #endregion
 
         #region Life Cycle
-        public override void Init()
+
+        /// <summary>
+        /// step 1. initialize attriube
+        /// step 2. load file list (hotfix)
+        /// step 3. load manifest
+        /// </summary>
+        public AssetBundleLoader()
         {
             base.Init();
 
             _loadingAsset = new Dictionary<int, AsyncLoadTask>();
             _curAllBundleInfos = new Dictionary<int, AssetBundleInfo>();
+
+            LoadFileList();
 
             LoadAssetBundleManifest();
         }
@@ -145,8 +153,20 @@ namespace BMBaseCore
 
         #endregion
 
-        #region Local Method
+        #region Local Init Method
 
+        // step 2
+        private void LoadFileList()
+        {
+            GameManager gameManager = GameManager.Instance;
+            HTTPTool.GetText(PathConst.FileListPath, (text) =>
+            {
+                string[] strs = text.Split('\n');
+                gameManager.SetGameVersion(strs[0]);
+            });
+        }
+
+        // step 3
         private void LoadAssetBundleManifest()
         {
             HTTPTool.GetAssetBundle(PathConst.AssetBundleManifestPath, ab =>
@@ -164,6 +184,9 @@ namespace BMBaseCore
             });
         }
 
+        #endregion
+
+        #region Local Load Method
         /// <summary>
         /// load one asset bundle by sync
         /// </summary>
