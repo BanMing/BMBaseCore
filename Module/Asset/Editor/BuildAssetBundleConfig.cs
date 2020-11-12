@@ -33,7 +33,18 @@ namespace BMBaseCore
 
         public bool isEncryptAb;
 
-        public void Check()
+
+        public void TrimData()
+        {
+            CheckFolderPath();
+
+            channels.RemoveAll(item =>
+            {
+                return string.IsNullOrEmpty(item.name) || string.IsNullOrEmpty(item.webConfigUrl);
+            });
+        }
+
+        public void CheckFolderPath()
         {
             folderPaths.RemoveAll(item =>
             {
@@ -41,13 +52,20 @@ namespace BMBaseCore
             });
         }
 
+        public bool CheckChannel(int selectChannelIndex)
+        {
+            if (selectChannelIndex >= channels.Count)
+            {
+                return false;
+            }
+            Application.OpenURL(channels[selectChannelIndex].webConfigUrl);
+
+            return !string.IsNullOrEmpty(channels[selectChannelIndex].name) && !string.IsNullOrEmpty(channels[selectChannelIndex].webConfigUrl);
+        }
         public string[] ToChannelNameString()
         {
-            if (channels == null || channels.Count < 1)
-            {
-                return new string[] { };
-            }
-            string[] res = new string[channels.Count];
+            string[] res = new string[channels.Count + 1];
+            res[channels.Count] = "new channel";
             for (int i = 0; i < channels.Count; i++)
             {
                 res[i] = channels[i].name;
@@ -55,9 +73,13 @@ namespace BMBaseCore
             return res;
         }
 
+#if UNITY_EDITOR
         public static BuildAssetBundleConfig Load()
         {
-            return UnityEditor.AssetDatabase.LoadAssetAtPath<BuildAssetBundleConfig>(PATH);
+            BuildAssetBundleConfig config = UnityEditor.AssetDatabase.LoadAssetAtPath<BuildAssetBundleConfig>(PATH);
+            config.TrimData();
+            return config;
         }
+#endif
     }
 }

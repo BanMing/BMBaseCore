@@ -16,13 +16,14 @@ MonoBehaviour:
   - Assets/Res/AnimClips/AudienceAdd
   - Assets/Res/Atlas/Chat
   - Assets/Res/AnimClips/Show
-  - Assets/Res/Config/Game
   - Assets/Res/Atlas/Achievement
   - Assets/Res/Atlas/CallingCard
   - Assets/Res/Login
   version1: 0
   version2: 0
   version3: 0
-  channels:
-  - name: Local
-    webConfigUrl: https://127.0.0.1
+  channels: []
+  isHotfix: 1
+  isNeedReboot: 0
+  isZipAb: 0
+  isEncryptAb: 0

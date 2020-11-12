@@ -44,6 +44,11 @@ namespace BMBaseCore
             s_abBuilderWindow.Show();
         }
 
+        private void OnDestroy()
+        {
+            _buildAbConfig.TrimData();
+        }
+
         #endregion
 
         #region OnGUI
@@ -128,7 +133,7 @@ namespace BMBaseCore
                 }
                 if (GUILayout.Button("Save"))
                 {
-                    _buildAbConfig.Check();
+                    _buildAbConfig.CheckFolderPath();
                 }
             }
             GUILayout.EndHorizontal();
@@ -152,17 +157,29 @@ namespace BMBaseCore
         {
             if (!_buildAbConfig.isHotfix || !(_isShowChannelConfig = EditorGUILayout.Foldout(_isShowChannelConfig, "Channels Config"))) { return; }
 
-            //GUILayout.BeginHorizontal();
+            _selectChannelIndex = EditorGUILayout.Popup("Channels :", _selectChannelIndex, _buildAbConfig.ToChannelNameString());
+
+            if (_selectChannelIndex >= _buildAbConfig.channels.Count)
             {
-                _selectChannelIndex = EditorGUILayout.Popup("Channels :", _selectChannelIndex, _buildAbConfig.ToChannelNameString());
+                _buildAbConfig.channels.Add(new BuildChannel() { name = "new channel" });
+                s_abBuilderWindow.Repaint();
             }
-            //GUILayout.EndHorizontal();
+
+            _buildAbConfig.channels[_selectChannelIndex].name = EditorGUILayout.TextField("name:", _buildAbConfig.channels[_selectChannelIndex].name);
+            _buildAbConfig.channels[_selectChannelIndex].webConfigUrl = EditorGUILayout.TextField("webConfigUrl:", _buildAbConfig.channels[_selectChannelIndex].webConfigUrl);
 
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Box("webConfigUrl:");
-
-                _buildAbConfig.channels[_selectChannelIndex].webConfigUrl = GUILayout.TextField(_buildAbConfig.channels[_selectChannelIndex].webConfigUrl);
+                if (GUILayout.Button("Add"))
+                {
+                    _buildAbConfig.channels.Add(new BuildChannel() { name = "new channel" });
+                    _selectChannelIndex = _buildAbConfig.channels.Count - 1;
+                    s_abBuilderWindow.Repaint();
+                }
+                if (GUILayout.Button("Check") && !_buildAbConfig.CheckChannel(_selectChannelIndex))
+                {
+                    EditorUtility.DisplayDialog("Eorr", "channel config eorr", "Let me see");
+                }
             }
             GUILayout.EndHorizontal();
 
@@ -180,7 +197,7 @@ namespace BMBaseCore
             _selectPlatformIndex = EditorGUILayout.Popup("Build Target:", _selectPlatformIndex, Utility.Platform.RuntimePlatformNames);
             if (GUILayout.Button("Build"))
             {
-                _buildAbConfig.Check();
+                _buildAbConfig.CheckFolderPath();
 
                 bool isBuild = EditorUtility.DisplayDialog("tips", Utility.Text.Format("would you build assetbuild?\nplatform:{0}\nversion:{1}.{2}.{3}\nIt will delete the folder of streamingAssts in project!",
                     Utility.Platform.RuntimePlatformNames[_selectPlatformIndex], _buildAbConfig.version1, _buildAbConfig.version2, _buildAbConfig.version3), "Ok", "Cancel");
