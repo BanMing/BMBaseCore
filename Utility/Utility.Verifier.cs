@@ -17,73 +17,95 @@ namespace BMBaseCore
     {
         public static class Verifier
         {
-            private static readonly MD5 md5 = MD5.Create();
+            private static readonly SHA256Managed sha256 = new SHA256Managed();
             private static readonly CRC32 crc32 = new CRC32();
 
-            #region MD5
+            #region SHA256Managed
 
-            public static string GetMD5Hash(string input)
+            public static string GetSHA256Hash(string input)
             {
-                var data = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+                byte[] data = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
                 return ToHash(data);
             }
 
-            public static string GetMD5Hash(Stream input)
+            public static string GetSHA256Hash(Stream input)
             {
-                var data = md5.ComputeHash(input);
+                byte[] data = sha256.ComputeHash(input);
                 return ToHash(data);
             }
 
-            public static bool VerifyMd5Hash(string input, string hash)
+            public static bool VerifySHA256Hash(string input, string hash)
             {
-                var comparer = StringComparer.OrdinalIgnoreCase;
+                StringComparer comparer = StringComparer.OrdinalIgnoreCase;
                 return 0 == comparer.Compare(input, hash);
             }
 
-            #endregion MD5
+            #endregion SHA256Managed
 
             #region CRC32
 
-            public static string GetCRC32Hash(Stream input)
-            {
-                var data = crc32.ComputeHash(input);
-                return ToHash(data);
-            }
-
-            public static uint GetCrc(byte[] bytes)
+            public static uint GetCRC32(byte[] bytes)
             {
                 return CRC32.Compute(bytes);
             }
 
-            public static string GetCRC32Hash(byte[] bytes)
+            public static uint GetCRC32(Stream input)
             {
-                var data = crc32.ComputeHash(bytes);
+                byte[] data = crc32.ComputeHash(input);
+                return GetCRC32(data);
+            }
+
+            public static uint GetCRC32(string str)
+            {
+                byte[] data = System.Text.UTF8Encoding.UTF8.GetBytes(str);
+                return GetCRC32(data);
+            }
+
+            public static string GetCRC32String(byte[] bytes)
+            {
+                byte[] data = crc32.ComputeHash(bytes);
+                return ToHash(data);
+            }
+
+            public static string GetCRC32String(Stream input)
+            {
+                byte[] data = crc32.ComputeHash(input);
+                return ToHash(data);
+            }
+
+            public static string GetCRC32String(string str)
+            {
+                byte[] data = System.Text.UTF8Encoding.UTF8.GetBytes(str);
                 return ToHash(data);
             }
 
             public static string ToHash(byte[] data)
             {
-                var sb = new StringBuilder();
-                foreach (var t in data)
-                    sb.Append(t.ToString("x2"));
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sb.Append(data[i].ToString("x2"));
+                }
+
                 return sb.ToString();
             }
 
             public static string GetCRC32Hash(string input)
             {
-                var data = crc32.ComputeHash(Encoding.UTF8.GetBytes(input));
+                byte[] data = crc32.ComputeHash(Encoding.UTF8.GetBytes(input));
                 return ToHash(data);
             }
 
             public static bool VerifyCrc32Hash(string input, string hash)
             {
-                var comparer = StringComparer.OrdinalIgnoreCase;
+                StringComparer comparer = StringComparer.OrdinalIgnoreCase;
                 return 0 == comparer.Compare(input, hash);
             }
 
             #endregion CRC32
         }
-
+        
+        #region CRC32 Struct
         /// <summary>
         /// https://damieng.com/blog/2006/08/08/calculating_crc32_in_c_and_net
         /// https://jonlabelle.com/snippets/view/csharp/calculate-crc32-hash-in-csharp
@@ -106,7 +128,9 @@ namespace BMBaseCore
             public CRC32(UInt32 polynomial, UInt32 seed)
             {
                 if (!BitConverter.IsLittleEndian)
+                {
                     throw new PlatformNotSupportedException("Not supported on Big Endian processors");
+                }
 
                 _table = InitializeTable(polynomial);
                 this._seed = _hash = seed;
@@ -124,7 +148,7 @@ namespace BMBaseCore
 
             protected override byte[] HashFinal()
             {
-                var hashBuffer = UInt32ToBigEndianBytes(~_hash);
+                byte[] hashBuffer = UInt32ToBigEndianBytes(~_hash);
                 HashValue = hashBuffer;
                 return hashBuffer;
             }
@@ -152,43 +176,58 @@ namespace BMBaseCore
             private static UInt32[] InitializeTable(UInt32 polynomial)
             {
                 if (polynomial == DefaultPolynomial && _defaultTable != null)
-                    return _defaultTable;
-
-                var createTable = new UInt32[256];
-                for (var i = 0; i < 256; i++)
                 {
-                    var entry = (UInt32)i;
-                    for (var j = 0; j < 8; j++)
+                    return _defaultTable;
+                }
+
+                UInt32[] createTable = new UInt32[256];
+                for (int i = 0; i < 256; i++)
+                {
+                    UInt32 entry = (UInt32)i;
+                    for (int j = 0; j < 8; j++)
+                    {
                         if ((entry & 1) == 1)
+                        {
                             entry = (entry >> 1) ^ polynomial;
+                        }
                         else
+                        {
                             entry >>= 1;
+                        }
+                    }
                     createTable[i] = entry;
                 }
 
                 if (polynomial == DefaultPolynomial)
+                {
                     _defaultTable = createTable;
+                }
 
                 return createTable;
             }
 
             private static UInt32 CalculateHash(UInt32[] table, UInt32 seed, IList<byte> buffer, int start, int size)
             {
-                var hash = seed;
-                for (var i = start; i < start + size; i++)
+                uint hash = seed;
+                for (int i = start; i < start + size; i++)
+                {
                     hash = (hash >> 8) ^ table[buffer[i] ^ hash & 0xff];
+                }
                 return hash;
             }
 
             private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
             {
-                var result = BitConverter.GetBytes(uint32);
+                byte[] result = BitConverter.GetBytes(uint32);
 
                 if (BitConverter.IsLittleEndian)
+                {
                     Array.Reverse(result);
+                }
 
                 return result;
             }
         }
+        #endregion
     }
 }

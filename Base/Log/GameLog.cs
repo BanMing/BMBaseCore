@@ -12,9 +12,9 @@ namespace BMBaseCore
     /// <summary>
     /// 游戏日志类
     /// </summary>
-    public static partial class GameLog
+    public static class GameLog
     {
-        private static ILogHelper s_LogHelper = null;
+        private static ILogHelper s_LogHelper;
 
         /// <summary>
         /// 设置日志辅助器

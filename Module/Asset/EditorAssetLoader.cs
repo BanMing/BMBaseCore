@@ -21,9 +21,9 @@ namespace BMBaseCore
             return AssetDatabase.LoadAssetAtPath<T>(path);
         }
 
-        public T Load<T>(string path, string assetName = null) where T : UnityEngine.Object
+        public T Load<T>(string path, string assetName) where T : UnityEngine.Object
         {
-            throw new NotImplementedException();
+            return AssetDatabase.LoadAssetAtPath<T>(path);
         }
 
         public void LoadAsync<T>(string path, Action<T> callback) where T : UnityEngine.Object
@@ -31,14 +31,9 @@ namespace BMBaseCore
             callback?.Invoke(AssetDatabase.LoadAssetAtPath<T>(path));
         }
 
-        public void LoadAsync<T>(string path, string assetName = null, Action<T> callback = null) where T : UnityEngine.Object
+        public void LoadAsync<T>(string path, Action<T> callback, string assetName) where T : UnityEngine.Object
         {
-            throw new NotImplementedException();
-        }
-
-        public void LoadAsync<T>(string path, Action<T> callback, string assetName = null) where T : UnityEngine.Object
-        {
-            throw new NotImplementedException();
+            callback?.Invoke(AssetDatabase.LoadAssetAtPath<T>(path));
         }
 
         public void Release()

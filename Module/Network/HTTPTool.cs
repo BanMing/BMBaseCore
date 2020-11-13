@@ -230,5 +230,7 @@ namespace BMBaseCore
         }
 
         #endregion
+
+        protected HTTPTool() { }
     }
 }

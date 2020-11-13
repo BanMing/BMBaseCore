@@ -19,13 +19,13 @@ namespace BMBaseCore
         /// 类型名
         /// </summary>
         [NonSerialized]
-        private string _typeName = null;
+        private string _typeName;
 
         /// <summary>
         /// 是否启用日志
         /// </summary>
         [NonSerialized]
-        protected bool m_logEnable = false;
+        protected bool m_logEnable;
 
         #endregion
 
@@ -116,12 +116,11 @@ namespace BMBaseCore
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
+        [Conditional("WRITE_LOG_TO_FILE")]
         protected void WirteLog(string format, params object[] args)
         {
-#if WRITE_LOG_TO_FILE
             string newFormat = Utility.Text.Format("{0} : {1}", TypeName, format);
             GameLog.WriteLogToFile(Utility.Text.Format(newFormat, args));
-#endif
         }
 
 

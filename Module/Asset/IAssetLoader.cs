@@ -11,9 +11,11 @@ namespace BMBaseCore
 {
     public interface IAssetLoader
     {
-        T Load<T>(string path, string assetName = null) where T : UnityEngine.Object;
+        T Load<T>(string path) where T : UnityEngine.Object;
+        T Load<T>(string path, string assetName) where T : UnityEngine.Object;
 
-        void LoadAsync<T>(string path, Action<T> callback, string assetName = null) where T : UnityEngine.Object;
+        void LoadAsync<T>(string path, Action<T> callback) where T : UnityEngine.Object;
+        void LoadAsync<T>(string path, Action<T> callback, string assetName) where T : UnityEngine.Object;
 
         void Release();
     }

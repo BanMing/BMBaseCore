@@ -7,8 +7,7 @@
 
 namespace BMBaseCore
 {
-    public static partial class GameLog
-    {
+
         /// <summary>
         /// 游戏日志等级
         /// </summary>
@@ -39,5 +38,4 @@ namespace BMBaseCore
             /// </summary>
             Fatal
         }
-    }
 }

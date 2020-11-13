@@ -17,7 +17,16 @@ namespace BMBaseCore
             #region Format
 
             [ThreadStatic]
-            private static StringBuilder s_CacheSb = null;
+            private static StringBuilder s_CacheSb;
+            private static StringBuilder S_CacheSb
+            {
+                get
+                {
+                    if (S_CacheSb == null) { s_CacheSb = new StringBuilder(); }
+
+                    return S_CacheSb;
+                }
+            }
 
             public static string Format(string format, object arg0)
             {
@@ -26,11 +35,10 @@ namespace BMBaseCore
                     throw new Exception("Format is invalid.");
                 }
 
-                CheckCachedStringBuilder();
-                s_CacheSb.Clear();
-                s_CacheSb.Length = 0;
-                s_CacheSb.AppendFormat(format, arg0);
-                return s_CacheSb.ToString();
+                S_CacheSb.Clear();
+                S_CacheSb.Length = 0;
+                S_CacheSb.AppendFormat(format, arg0);
+                return S_CacheSb.ToString();
             }
 
             public static string Format(string format, object arg0, object arg1)
@@ -40,11 +48,10 @@ namespace BMBaseCore
                     throw new Exception("Format is invalid.");
                 }
 
-                CheckCachedStringBuilder();
-                s_CacheSb.Clear();
-                s_CacheSb.Length = 0;
-                s_CacheSb.AppendFormat(format, arg0, arg1);
-                return s_CacheSb.ToString();
+                S_CacheSb.Clear();
+                S_CacheSb.Length = 0;
+                S_CacheSb.AppendFormat(format, arg0, arg1);
+                return S_CacheSb.ToString();
             }
 
             public static string Format(string format, object arg0, object arg1, object arg2)
@@ -54,11 +61,10 @@ namespace BMBaseCore
                     throw new Exception("Format is invalid.");
                 }
 
-                CheckCachedStringBuilder();
-                s_CacheSb.Clear();
-                s_CacheSb.Length = 0;
-                s_CacheSb.AppendFormat(format, arg0, arg1, arg2);
-                return s_CacheSb.ToString();
+                S_CacheSb.Clear();
+                S_CacheSb.Length = 0;
+                S_CacheSb.AppendFormat(format, arg0, arg1, arg2);
+                return S_CacheSb.ToString();
             }
 
             public static string Format(string format, params object[] args)
@@ -68,20 +74,12 @@ namespace BMBaseCore
                     throw new Exception("Format is invalid.");
                 }
 
-                CheckCachedStringBuilder();
-                s_CacheSb.Clear();
-                s_CacheSb.Length = 0;
-                s_CacheSb.AppendFormat(format, args);
-                return s_CacheSb.ToString();
+                S_CacheSb.Clear();
+                S_CacheSb.Length = 0;
+                S_CacheSb.AppendFormat(format, args);
+                return S_CacheSb.ToString();
             }
 
-            private static void CheckCachedStringBuilder()
-            {
-                if (s_CacheSb == null)
-                {
-                    s_CacheSb = new StringBuilder();
-                }
-            }
             #endregion
 
             #region Check Char
@@ -92,7 +90,9 @@ namespace BMBaseCore
             private static bool IsLegalChar(char c)
             {
                 if (s_legalChars.Contains(c.ToString()))
+                {
                     return true;//是合法字符
+                }
                 return false;
             }
 

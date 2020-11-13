@@ -82,13 +82,18 @@ namespace BMBaseCore
 
         #region Public Method
 
+        public T Load<T>(string path) where T : UnityEngine.Object
+        {
+            return Load<T>(path, null);
+        }
+
         /// <summary>
         /// load asset sync
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T Load<T>(string path, string assetName = null) where T : UnityEngine.Object
+        public T Load<T>(string path, string assetName) where T : UnityEngine.Object
         {
             int pathHashCode = path.GetHashCode();
 
@@ -117,7 +122,13 @@ namespace BMBaseCore
             }
         }
 
-        public void LoadAsync<T>(string path, Action<T> callback, string assetName = null) where T : UnityEngine.Object
+
+        public void LoadAsync<T>(string path, Action<T> callback) where T : UnityEngine.Object
+        {
+            LoadAsync<T>(path, callback, null);
+        }
+
+        public void LoadAsync<T>(string path, Action<T> callback, string assetName) where T : UnityEngine.Object
         {
             if (_loadingAsset.ContainsKey(path.GetHashCode()))
             {
@@ -292,6 +303,7 @@ namespace BMBaseCore
 
             _curAllBundleInfos.Add(bundleInfo.pathHash, bundleInfo);
         }
+
         #endregion
 
     }

@@ -56,7 +56,15 @@ namespace BMBaseCore
         /// <summary>
         /// add string to length ('0' default) ,fill left
         /// </summary>
-        public static string FillLeft(this string str, int length, char c = '0')
+        public static string FillLeft(this string str, int length)
+        {
+            return str.FillLeft(length, '0');
+        }
+
+        /// <summary>
+        /// add string to length  ,fill left
+        /// </summary>
+        public static string FillLeft(this string str, int length, char c)
         {
             while (str.Length < length)
             {
@@ -68,6 +76,14 @@ namespace BMBaseCore
 
         /// <summary>
         /// add string to length ('0' default) ,fill right
+        /// </summary>
+        public static string FillRight(this string str, int length)
+        {
+            return str.FillRight(length, '0');
+        }
+
+        /// <summary>
+        /// add string to length  ,fill right
         /// </summary>
         public static string FillRight(this string str, int length, char c = '0')
         {

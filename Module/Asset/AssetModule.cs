@@ -13,8 +13,7 @@ namespace BMBaseCore
     {
         #region Attriube
 
-        private IAssetLoader _assetLoader;
-
+        private readonly IAssetLoader _assetLoader;
 
         #endregion
 
@@ -36,7 +35,7 @@ namespace BMBaseCore
             _assetLoader = new AssetBundleLoader();
 #endif
 
-            
+
         }
 
 
@@ -90,19 +89,25 @@ namespace BMBaseCore
             _assetLoader?.Release();
         }
 
-        public T Load<T>(string path, string assetName = null) where T : UnityEngine.Object
+        public T Load<T>(string path, string assetName) where T : UnityEngine.Object
         {
-            throw new NotImplementedException();
+            if (!System.IO.File.Exists(path))
+            {
+                return null;
+            }
+
+            return _assetLoader.Load<T>(path, assetName);
         }
 
-        public void LoadAsync<T>(string path, string assetName = null, Action<T> callback = null) where T : UnityEngine.Object
+        public void LoadAsync<T>(string path, Action<T> callback, string assetName) where T : UnityEngine.Object
         {
-            throw new NotImplementedException();
-        }
+            if (!System.IO.File.Exists(path))
+            {
+                callback?.Invoke(null);
+                return;
+            }
 
-        public void LoadAsync<T>(string path, Action<T> callback, string assetName = null) where T : UnityEngine.Object
-        {
-            throw new NotImplementedException();
+            _assetLoader.LoadAsync<T>(path, callback, assetName);
         }
 
         #endregion

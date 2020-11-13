@@ -18,16 +18,16 @@ namespace BMBaseCore
         Disconnect,
     }
 
-    public class SampleTCP
+    public class SampleTCP : IDisposable
     {
         #region Local Attribute
-        private TcpClient client = null;
+        private TcpClient client;
 
-        private NetworkStream outStream = null;
-        private MemoryStream memoryStream = null;
+        private NetworkStream outStream;
+        private MemoryStream memoryStream;
         private BinaryReader reader;
         private const int MAX_READ = 8192;
-        private byte[] byteBuffer = new byte[MAX_READ];
+        private readonly byte[] byteBuffer = new byte[MAX_READ];
 
         #endregion
 
@@ -286,6 +286,11 @@ namespace BMBaseCore
         private void sessionSend(byte[] bytes)
         {
             writeMessage(bytes);
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
 
         #endregion

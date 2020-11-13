@@ -110,8 +110,8 @@ namespace BMBaseCore
                         string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
 
                         int index = folderPath.IndexOf("Assets/");
-                        if (index == -1)
-                            return;
+
+                        if (index == -1) { return; }
 
                         _buildAbConfig.folderPaths[i] = folderPath.Substring(index);
                     }
@@ -380,7 +380,7 @@ namespace BMBaseCore
             {
                 string fileName = Path.GetFileName(filePaths[i]);
 
-                sb.AppendLine(Utility.Text.Format("{0} {1}", fileName, CRC32Tool.GetCRC32(fileName)));
+                sb.AppendLine(Utility.Text.Format("{0} {1}", fileName, Utility.Verifier.GetCRC32(fileName)));
 
                 EditorUtility.DisplayProgressBar("Save File List:", string.Empty, (i * 1.0f) / filePaths.Length);
             }

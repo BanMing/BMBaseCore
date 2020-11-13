@@ -68,15 +68,18 @@ public class InstantiateTool : SingletonMono<InstantiateTool>
     //{
     //    _instanctateQueque.Enqueue(new InstantateInfo(gameObject, count, eachCompeletCallBack, delayTimeMs));
     //}
+    public async Task InstantiateByAsync(GameObject gameObject, int count, Action<GameObject> completeCallbcak)
+    {
+        await InstantiateByAsync(gameObject, count, completeCallbcak, 10).ConfigureAwait(false);
+    }
 
-
-    public async void InstantiateByAsync(GameObject gameObject, int count, Action<GameObject> completeCallbcak, int delayTimeMs = 10)
+    public async Task InstantiateByAsync(GameObject gameObject, int count, Action<GameObject> completeCallbcak, int delayTimeMs)
     {
         for (int i = 0; i < count; i++)
         {
             if (this != null && isActiveAndEnabled)
             {
-                await instantiateByAsync(gameObject, completeCallbcak, delayTimeMs);
+                await instantiateByAsync(gameObject, completeCallbcak, delayTimeMs).ConfigureAwait(false);
             }
         }
     }
@@ -85,9 +88,9 @@ public class InstantiateTool : SingletonMono<InstantiateTool>
 
     #region private method
 
-    private async Task instantiateByAsync(GameObject gameObject, Action<GameObject> completeCallbcak, int delayTimeMs = 10)
+    private async Task instantiateByAsync(GameObject gameObject, Action<GameObject> completeCallbcak, int delayTimeMs)
     {
-        await Task.Delay(delayTimeMs);
+        await Task.Delay(delayTimeMs).ConfigureAwait(false);
 
         if (this == null || !isActiveAndEnabled)
         {

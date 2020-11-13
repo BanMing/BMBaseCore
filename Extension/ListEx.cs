@@ -14,23 +14,28 @@ namespace BMBaseCore
     public static class ListEx
     {
         [ThreadStatic]
-        private static StringBuilder s_CacheSb = null;
+        private static StringBuilder s_CacheSb;
+        private static StringBuilder S_CacheSb
+        {
+            get
+            {
+                if (s_CacheSb == null) { s_CacheSb = new StringBuilder(); }
+
+                return s_CacheSb;
+            }
+        }
 
         public static string ToItemString<T>(this List<T> list)
         {
-            if (s_CacheSb == null)
-            {
-                s_CacheSb = new StringBuilder();
-            }
-            s_CacheSb.Clear();
-            s_CacheSb.Length = 0;
+            S_CacheSb.Clear();
+            S_CacheSb.Length = 0;
 
             for (int i = 0; i < list.Count; i++)
             {
-                s_CacheSb.AppendLine($"[{i}] = {list[i].ToString()}");
+                S_CacheSb.AppendLine($"[{i}] = {list[i].ToString()}");
             }
 
-            return s_CacheSb.ToString();
+            return S_CacheSb.ToString();
         }
     }
 }

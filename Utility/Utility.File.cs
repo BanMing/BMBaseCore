@@ -100,10 +100,14 @@ namespace BMBaseCore
                 // Remove . in filePath
 
                 while (filePath.Contains("/./"))
+                {
                     filePath = filePath.Replace("/./", "/");
+                }
 
                 while (filePath.Contains(@"\.\"))
+                {
                     filePath = filePath.Replace(@"\.\", @"\");
+                }
 
                 filePath = Regex.Replace(filePath, @"^\.(\/|\\)", string.Empty);
 
@@ -122,7 +126,9 @@ namespace BMBaseCore
                 foreach (var c in url)
                 {
                     if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) || Array.IndexOf(UrlSafeChars, c) != -1)
+                    {
                         safeline.Append(c);
+                    }
                     else
                     {
                         var bytes = encoder.GetBytes(c.ToString());

@@ -162,13 +162,8 @@ namespace BMBaseCore
             /// </summary>
             public static float GetPoint2LineDis(Vector2 point, Vector2 lineFrom, Vector2 lineTo)
             {
-                Vector2 ab = lineTo - lineFrom;
-                Vector2 ac = point - lineFrom;
-
-                //Vector2.
-                float dot = Vector2.Dot(ac, ab);
-                //return cross.magnitude / ab.magnitude;
-                return 0;
+                Vector2 intersectPoint = GetIntersectionPoint(point, lineFrom, lineTo);
+                return Vector2.Distance(intersectPoint,point);
             }
 
             /// <summary>

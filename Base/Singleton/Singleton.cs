@@ -8,14 +8,14 @@ using System;
 
 namespace BMBaseCore
 {
-    public class Singleton<T> where T : BaseObject
+    public sealed class Singleton<T> where T : BaseObject
     {
         public static T Instance
         {
             get { return Nest.instance; }
         }
 
-        private class Nest
+        private static class Nest
         {
             static Nest()
             {
@@ -23,5 +23,7 @@ namespace BMBaseCore
             }
             internal static readonly T instance = Activator.CreateInstance<T>();
         }
+
+        private Singleton() { }
     }
 }
