@@ -16,6 +16,11 @@ namespace BMBaseCore
                 Debug.Log("Clear Done!");
             }
 
+            [MenuItem("Tools/Animation/Split Animation Clip Form FBX")]
+            private static void OpenSplitAnimationEditor()
+            {
+                EditorWindow.CreateWindow<SplitAnimationClipEditor>().Show();
+            }
         }
     }
 }
