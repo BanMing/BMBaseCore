@@ -6,6 +6,7 @@
 *******************************************************************/
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -114,10 +115,22 @@ namespace BMBaseCore
 
             if (!_config.CheckFolderPath())
             {
-                EditorUtility.DisplayDialog("Error", "Config is not right","got it");
+                EditorUtility.DisplayDialog("Error", "Config is not right", "got it");
                 return;
             }
 
+            string[] files = Directory.GetFiles(Path.GetFullPath(_config.sourceFolders[0]));
+
+            Debug.Log(files[0]);
+
+            AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(files[0]);
+            Debug.Log(animationClip);
+
+            var objs = AssetDatabase.LoadAllAssetsAtPath(files[0]);
+            for (int i = 0; i < objs.Length; i++)
+            {
+                Debug.Log(objs[i]);
+            }
 
         }
 

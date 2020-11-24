@@ -16,7 +16,7 @@ namespace BMBaseCore
     [Serializable]
     public class BuildAssetBundleConfig : ScriptableObject
     {
-        public static readonly string PATH = @"Assets\Scripts\BMBaseCore\Module\Asset\Editor\FolderAssetBundleConfig.asset";
+        public static readonly string PATH = @"Assets\BMBaseCore\Module\Asset\Editor\FolderAssetBundleConfig.asset";
         public List<string> folderPaths = new List<string>();
 
         public int version1;

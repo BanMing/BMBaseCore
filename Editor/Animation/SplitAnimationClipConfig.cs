@@ -17,7 +17,7 @@ namespace BMBaseCore
     public class SplitAnimationClipConfig : ScriptableObject
     {
 
-        private const string PATH = @"Assets\Scripts\BMBaseCore\Editor\Animation\SplitAnimationClipConfig.asset";
+        private const string PATH = @"Assets\BMBaseCore\Editor\Animation\SplitAnimationClipConfig.asset";
 
         public List<string> sourceFolders = new List<string>();
 

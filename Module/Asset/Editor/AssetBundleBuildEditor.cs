@@ -74,7 +74,7 @@ namespace BMBaseCore
             EditorGUILayout.HelpBox("You must know the rules before building!", MessageType.Error, true);
             if (GUILayout.Button("read build assetbundle rules"))
             {
-                Application.OpenURL(Path.GetFullPath(@"Assets\Scripts\BMBaseCore\Module\Asset\Editor\BuildAssetBundleRules.txt"));
+                Application.OpenURL(Path.GetFullPath(@"Assets\BMBaseCore\Module\Asset\Editor\BuildAssetBundleRules.txt"));
             }
             GUILayout.Space(10);
         }
