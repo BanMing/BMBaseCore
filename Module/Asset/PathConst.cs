@@ -11,6 +11,10 @@ namespace BMBaseCore
 {
     public class PathConst
     {
+        /// <summary>
+        /// Assets/
+        /// </summary>
+        public const string AssetsPerfix = "Assets/";
 
         /// <summary>
         /// folder of asset in project

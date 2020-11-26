@@ -16,23 +16,32 @@ namespace BMBaseCore
     [Serializable]
     public class SplitAnimationClipConfig : ScriptableObject
     {
+        [Serializable]
+        public class Config
+        {
+            public string sourceFolderPath;
+            public string targetFolderPath;
+        }
 
         private const string PATH = @"Assets\BMBaseCore\Editor\Animation\SplitAnimationClipConfig.asset";
 
-        public List<string> sourceFolders = new List<string>();
-
-        public string targetTopFolder;
+        public List<Config> configs = new List<Config>();
 
         public bool CheckFolderPath()
         {
-            bool isCanSplit = targetTopFolder.IndexOf("Assets/") != -1 && !string.IsNullOrEmpty(targetTopFolder) && Directory.Exists(Path.GetFullPath(targetTopFolder));
-
-            sourceFolders.RemoveAll(item =>
+            configs.RemoveAll(item =>
             {
-                return item.IndexOf("Assets/") == -1 || string.IsNullOrEmpty(item) || !Directory.Exists(Path.GetFullPath(item));
-            });
+                bool isSourceOk = string.IsNullOrEmpty(item.sourceFolderPath) ||
+                item.sourceFolderPath.IndexOf(PathConst.AssetsPerfix) == -1 ||
+                !Directory.Exists(Path.GetFullPath(item.sourceFolderPath));
 
-            return isCanSplit && sourceFolders.Count > 0;
+                bool isTargetOk = string.IsNullOrEmpty(item.targetFolderPath) ||
+              item.targetFolderPath.IndexOf(PathConst.AssetsPerfix) == -1 ||
+              !Directory.Exists(Path.GetFullPath(item.targetFolderPath));
+                
+                return isSourceOk&&isTargetOk;
+            });
+            return configs.Count > 0;
         }
 
         public static SplitAnimationClipConfig Load()

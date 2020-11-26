@@ -14,6 +14,8 @@ namespace BMBaseCore
 {
     public class SplitAnimationClipEditor : EditorWindow
     {
+        private const string ANIMATION_CLIP_ACCRACY = "f3";
+
         private float windowWith9;
 
         private SplitAnimationClipConfig _config;
@@ -27,6 +29,7 @@ namespace BMBaseCore
         private void OnDestroy()
         {
             _config.CheckFolderPath();
+            EditorUtility.SetDirty(_config);
         }
 
         #region GUI
@@ -35,10 +38,9 @@ namespace BMBaseCore
         {
             windowWith9 = position.width / 9;
 
-            DrawTargetPath();
             DrawSourcePaths();
 
-            if (GUILayout.Button("Split"))
+            if (GUILayout.Button("Split All"))
             {
                 Split();
             }
@@ -48,28 +50,51 @@ namespace BMBaseCore
         {
             GUILayout.Space(10);
 
-            for (int i = 0; i < _config.sourceFolders.Count; i++)
+            for (int i = 0; i < _config.configs.Count; i++)
             {
-                GUILayout.BeginHorizontal();
+                GUILayout.BeginVertical("box");
                 {
-                    GUILayout.Label($"Source Path {i + 1}", GUILayout.Width(windowWith9));
-                    GUILayout.Box(_config.sourceFolders[i], GUILayout.Width(5.5f * windowWith9));
-                    if (GUILayout.Button("...", GUILayout.Width(windowWith9)))
+                    GUILayout.Label($"Animation Clip Path {i + 1}");
+                    GUILayout.BeginHorizontal();
                     {
-                        string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
+                        GUILayout.Label($"sourceFolderPath :", GUILayout.Width(windowWith9));
+                        GUILayout.Box(_config.configs[i].sourceFolderPath, GUILayout.Width(5.5f * windowWith9));
+                        if (GUILayout.Button("...", GUILayout.Width(windowWith9)))
+                        {
+                            string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
 
-                        int index = folderPath.IndexOf("Assets/");
+                            int index = folderPath.IndexOf("Assets/");
 
-                        if (index == -1) { return; }
+                            if (index == -1) { return; }
 
-                        _config.sourceFolders[i] = folderPath.Substring(index);
+                            //_config.sourceFolders[i] = folderPath.Substring(index);
+                        }
                     }
-                    if (GUILayout.Button("del", GUILayout.Width(windowWith9)))
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.BeginHorizontal();
                     {
-                        _config.sourceFolders.RemoveAt(i);
+                        GUILayout.Label($"sourceFolderPath :");
+                        GUILayout.Box(_config.configs[i].sourceFolderPath, GUILayout.Width(5.5f * windowWith9));
+                        if (GUILayout.Button("...", GUILayout.Width(windowWith9)))
+                        {
+                            string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
+
+                            int index = folderPath.IndexOf("Assets/");
+
+                            if (index == -1) { return; }
+
+                            //_config.sourceFolders[i] = folderPath.Substring(index);
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+
+                    if (GUILayout.Button("del"))
+                    {
+                        //_config.sourceFolders.RemoveAt(i);
                     }
                 }
-                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
             }
 
             GUILayout.Space(20);
@@ -77,35 +102,12 @@ namespace BMBaseCore
 
             if (GUILayout.Button("Add Source Path"))
             {
-                _config.sourceFolders.Add(string.Empty);
+                //_config.sourceFolders.Add(string.Empty);
             }
 
             GUILayout.Space(10);
         }
 
-        private void DrawTargetPath()
-        {
-            GUILayout.Space(10);
-
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label($"Target Top Path", GUILayout.Width(windowWith9));
-                GUILayout.Box(_config.targetTopFolder, GUILayout.Width(5.5f * windowWith9));
-                if (GUILayout.Button("...", GUILayout.Width(windowWith9 * 2)))
-                {
-                    string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
-
-                    int index = folderPath.IndexOf("Assets/");
-
-                    if (index == -1) { return; }
-
-                    _config.targetTopFolder = folderPath.Substring(index);
-                }
-            }
-            GUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-        }
 
         #endregion
 
@@ -119,69 +121,26 @@ namespace BMBaseCore
                 return;
             }
 
-            string[] files = Directory.GetFiles(Path.GetFullPath(_config.sourceFolders[0]));
+            //string[] files = Directory.GetFiles(Path.GetFullPath(_config.sourceFolders[0]));
 
 
-            for (int i = 0; i < files.Length; i++)
-            {
-                if (files[i].EndsWith(".meta"))
-                {
-                    continue;
-                }
+            //for (int i = 0; i < files.Length; i++)
+            //{
+            //    if (files[i].EndsWith(".meta"))
+            //    {
+            //        continue;
+            //    }
 
-                string path = files[i].Substring(files[i].IndexOf(@"Assets\"));
-                Debug.Log(path);
+            //    string path = files[i].Substring(files[i].IndexOf(@"Assets\"));
+            //    Debug.Log(path);
 
-                AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
-                AnimationClip singleClip = CopyAnimationClip(animationClip);
-                AssetDatabase.CreateAsset(singleClip, _config.targetTopFolder + "/" + animationClip.name + ".anim");
-            }
+            //    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
+            //    AnimationClip singleClip = CopyAnimationClip(animationClip);
 
-        }
+            //    string clipName = Path.GetFileNameWithoutExtension(path);
+            //    //AssetDatabase.CreateAsset(singleClip, _config.targetTopFolder + "/" + animationClip.name + ".anim");
+            //}
 
-        static private void CompressAnim()
-        {
-            UnityEngine.Object folder = Selection.objects[0];
-            if (folder == null || folder.GetType() != typeof(DefaultAsset)) { return; }
-
-            string folderPath = AssetDatabase.GetAssetPath(folder.GetInstanceID());
-            // UnityEngine.Debug.Log(folderPath);
-            folderPath = Path.GetFullPath(folderPath);
-            string[] animPaths = Directory.GetFiles(folderPath, "*.anim");
-            for (int j = 0; j < animPaths.Length; j++)
-            {
-                string animPath = animPaths[j].Substring(animPaths[j].IndexOf("Assets\\"));
-                AnimationClip theAnimation = AssetDatabase.LoadAssetAtPath<AnimationClip>(animPath);
-                // AnimationClip theAnimation = Selection.objects[0] as AnimationClip;
-                if (theAnimation == null) return;
-
-                //浮点数精度压缩到f3
-                AnimationClipCurveData[] curves = null;
-                curves = AnimationUtility.GetAllCurves(theAnimation);
-                Keyframe key;
-                Keyframe[] keyFrames;
-                for (int ii = 0; ii < curves.Length; ++ii)
-                {
-                    AnimationClipCurveData curveDate = curves[ii];
-                    if (curveDate.curve == null || curveDate.curve.keys == null)
-                    {
-                        continue;
-                    }
-                    keyFrames = curveDate.curve.keys;
-                    for (int i = 0; i < keyFrames.Length; i++)
-                    {
-                        key = keyFrames[i];
-                        key.value = float.Parse(key.value.ToString("f3"));
-                        key.inTangent = float.Parse(key.inTangent.ToString("f3"));
-                        key.outTangent = float.Parse(key.outTangent.ToString("f3"));
-                        keyFrames[i] = key;
-                    }
-                    curveDate.curve.keys = keyFrames;
-                    theAnimation.SetCurve(curveDate.path, curveDate.type, curveDate.propertyName, curveDate.curve);
-                }
-            }
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         private AnimationClip CopyAnimationClip(AnimationClip sourceClip)
@@ -191,7 +150,17 @@ namespace BMBaseCore
 
             for (int i = 0; i < editorCurves.Length; i++)
             {
-                AnimationUtility.SetEditorCurve(newClip, editorCurves[i], AnimationUtility.GetEditorCurve(sourceClip, editorCurves[i]));
+                // reduce animation accuracy 
+                var animationCurve = AnimationUtility.GetEditorCurve(sourceClip, editorCurves[i]);
+                for (int j = 0; j < animationCurve.keys.Length; j++)
+                {
+                    var key = animationCurve.keys[j];
+                    key.value = float.Parse(key.value.ToString(ANIMATION_CLIP_ACCRACY));
+                    key.inTangent = float.Parse(key.inTangent.ToString(ANIMATION_CLIP_ACCRACY));
+                    key.outTangent = float.Parse(key.outTangent.ToString(ANIMATION_CLIP_ACCRACY));
+                }
+
+                AnimationUtility.SetEditorCurve(newClip, editorCurves[i], animationCurve);
             }
 
             return newClip;
