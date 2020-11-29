@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56f611d500a10c489ac51bdb813957c, type: 3}
   m_Name: SplitAnimationClipConfig
   m_EditorClassIdentifier: 
-  sourceFolders: []
-  targetTopFolder: 
+  configs:
+  - sourceFolderPath: Assets/Res/Model
+    targetFolderPath: Assets/Res/AnimationClip

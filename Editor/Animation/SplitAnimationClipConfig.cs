@@ -38,10 +38,23 @@ namespace BMBaseCore
                 bool isTargetOk = string.IsNullOrEmpty(item.targetFolderPath) ||
               item.targetFolderPath.IndexOf(PathConst.AssetsPerfix) == -1 ||
               !Directory.Exists(Path.GetFullPath(item.targetFolderPath));
-                
-                return isSourceOk&&isTargetOk;
+
+                return isSourceOk && isTargetOk;
             });
             return configs.Count > 0;
+        }
+
+
+        public void AddEmptyOne()
+        {
+            configs.Add(new Config());
+        }
+
+        public void DelOne(int index)
+        {
+            if (configs.Count <= index) { return; }
+
+            configs.RemoveAt(index);
         }
 
         public static SplitAnimationClipConfig Load()

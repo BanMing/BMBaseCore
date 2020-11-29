@@ -16,14 +16,14 @@ namespace BMBaseCore
     {
         private const string ANIMATION_CLIP_ACCRACY = "f3";
 
-        private float windowWith9;
+        private float windowWith8;
 
         private SplitAnimationClipConfig _config;
 
         private void OnEnable()
         {
             _config = SplitAnimationClipConfig.Load();
-            windowWith9 = position.width / 9;
+            windowWith8 = position.width / 8;
         }
 
         private void OnDestroy()
@@ -36,13 +36,13 @@ namespace BMBaseCore
 
         private void OnGUI()
         {
-            windowWith9 = position.width / 9;
+            windowWith8 = position.width / 9;
 
             DrawSourcePaths();
 
             if (GUILayout.Button("Split All"))
             {
-                Split();
+                SplitAll();
             }
         }
 
@@ -55,44 +55,24 @@ namespace BMBaseCore
                 GUILayout.BeginVertical("box");
                 {
                     GUILayout.Label($"Animation Clip Path {i + 1}");
+
+                    DrawOneFolder("source", ref _config.configs[i].sourceFolderPath);
+                    DrawOneFolder("target", ref _config.configs[i].targetFolderPath);
+
+                    GUILayout.Space(10);
                     GUILayout.BeginHorizontal();
                     {
-                        GUILayout.Label($"sourceFolderPath :", GUILayout.Width(windowWith9));
-                        GUILayout.Box(_config.configs[i].sourceFolderPath, GUILayout.Width(5.5f * windowWith9));
-                        if (GUILayout.Button("...", GUILayout.Width(windowWith9)))
+                        if (GUILayout.Button("del"))
                         {
-                            string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
-
-                            int index = folderPath.IndexOf("Assets/");
-
-                            if (index == -1) { return; }
-
-                            //_config.sourceFolders[i] = folderPath.Substring(index);
+                            _config.DelOne(i);
+                        }
+                        if (GUILayout.Button("split one"))
+                        {
+                            SplitOnePath(_config.configs[i].sourceFolderPath, _config.configs[i].targetFolderPath);
+                            AssetDatabase.Refresh();
                         }
                     }
                     GUILayout.EndHorizontal();
-
-                    GUILayout.BeginHorizontal();
-                    {
-                        GUILayout.Label($"sourceFolderPath :");
-                        GUILayout.Box(_config.configs[i].sourceFolderPath, GUILayout.Width(5.5f * windowWith9));
-                        if (GUILayout.Button("...", GUILayout.Width(windowWith9)))
-                        {
-                            string folderPath = EditorUtility.OpenFolderPanel("select folder", "", "");
-
-                            int index = folderPath.IndexOf("Assets/");
-
-                            if (index == -1) { return; }
-
-                            //_config.sourceFolders[i] = folderPath.Substring(index);
-                        }
-                    }
-                    GUILayout.EndHorizontal();
-
-                    if (GUILayout.Button("del"))
-                    {
-                        //_config.sourceFolders.RemoveAt(i);
-                    }
                 }
                 GUILayout.EndVertical();
             }
@@ -100,19 +80,81 @@ namespace BMBaseCore
             GUILayout.Space(20);
 
 
-            if (GUILayout.Button("Add Source Path"))
+            if (GUILayout.Button("Add Config Path"))
             {
-                //_config.sourceFolders.Add(string.Empty);
+                _config.AddEmptyOne();
             }
 
             GUILayout.Space(10);
         }
 
+        private void DrawOneFolder(string tag, ref string path)
+        {
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Label($"{tag} :", GUILayout.Width(windowWith8));
+                GUILayout.Box(path, GUILayout.Width(6.5f * windowWith8));
+                if (GUILayout.Button("...", GUILayout.Width(windowWith8)))
+                {
+                    string folderPath = EditorUtility.OpenFolderPanel($"select {tag} folder", "", "");
+
+                    int index = folderPath.IndexOf(PathConst.AssetsPerfix);
+
+                    if (index == -1) { return; }
+
+                    path = folderPath.Substring(index);
+                }
+            }
+            GUILayout.EndHorizontal();
+        }
 
         #endregion
 
+        private void SplitOnePath(string sourcePath, string targetPath)
+        {
+            string fullPath = Path.GetFullPath(sourcePath);
+            string[] files = Directory.GetFiles(fullPath);
 
-        private void Split()
+            string targetFullPath = Path.GetFullPath(targetPath);
+            if (!Directory.Exists(targetFullPath))
+            {
+                Directory.CreateDirectory(targetFullPath);
+            }
+
+            Debug.Log($"targetFullPath:{targetFullPath}");
+            string[] subDirs = Directory.GetDirectories(fullPath);
+            for (int i = 0; i < subDirs.Length; i++)
+            {
+                string subTargetPath = Path.Combine(targetPath, Path.GetFileName(subDirs[i])).Replace("/", "\\");
+                Debug.Log($"subTargetPath:{subTargetPath} | targetPath:{targetPath}");
+
+                SplitOnePath(subDirs[i], subTargetPath);
+            }
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].EndsWith(".meta"))
+                {
+                    continue;
+                }
+
+                string path = files[i].Substring(files[i].IndexOf(@"Assets\"));
+                Debug.Log(path);
+
+                AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
+                AnimationClip singleClip = CopyAnimationClip(animationClip);
+
+                string clipName = Path.GetFileNameWithoutExtension(path);
+                string newClipPath = string.Format("{0}\\{1}.anim", targetPath, clipName).Replace("/", "\\");
+                newClipPath = newClipPath.Substring(newClipPath.IndexOf(@"Assets\"));
+                Debug.Log($"newClipPath :{newClipPath}");
+
+                AssetDatabase.CreateAsset(singleClip, newClipPath);
+            }
+        }
+
+
+        private void SplitAll()
         {
 
             if (!_config.CheckFolderPath())
@@ -121,27 +163,14 @@ namespace BMBaseCore
                 return;
             }
 
-            //string[] files = Directory.GetFiles(Path.GetFullPath(_config.sourceFolders[0]));
+            for (int i = 0; i < _config.configs.Count; i++)
+            {
+                SplitOnePath(_config.configs[i].sourceFolderPath, _config.configs[i].targetFolderPath);
+            }
 
-
-            //for (int i = 0; i < files.Length; i++)
-            //{
-            //    if (files[i].EndsWith(".meta"))
-            //    {
-            //        continue;
-            //    }
-
-            //    string path = files[i].Substring(files[i].IndexOf(@"Assets\"));
-            //    Debug.Log(path);
-
-            //    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
-            //    AnimationClip singleClip = CopyAnimationClip(animationClip);
-
-            //    string clipName = Path.GetFileNameWithoutExtension(path);
-            //    //AssetDatabase.CreateAsset(singleClip, _config.targetTopFolder + "/" + animationClip.name + ".anim");
-            //}
-
+            AssetDatabase.Refresh();
         }
+
 
         private AnimationClip CopyAnimationClip(AnimationClip sourceClip)
         {
