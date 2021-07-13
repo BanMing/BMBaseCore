@@ -15,6 +15,7 @@ namespace BMBaseCore.Entities
         public override void Init()
         {
             base.Init();
+            Instance = this;
         }
 
         public override void Destroy()

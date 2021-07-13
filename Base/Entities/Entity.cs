@@ -50,6 +50,7 @@ namespace BMBaseCore.Entities
             ushort creationIdCheck = (ushort)(entityReference & 0xffff);
             return new Entity<TEntity>(index, creationIdCheck);
         }
+
         public override string ToString()
         {
             if (this == None)
