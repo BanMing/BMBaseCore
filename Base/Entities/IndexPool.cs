@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace BMBaseCore.Entities
@@ -53,7 +54,7 @@ namespace BMBaseCore.Entities
         {
             if (firstFree < _capacity)
             {
-                // Grab next available slot off the free list
+                // Grab next available slot of the free list
                 IndexType newIndex = firstFree;
                 // Negate because it`s a free slot
                 firstFree = (short)-indices[firstFree];
@@ -72,6 +73,9 @@ namespace BMBaseCore.Entities
                     indices[newIndex - 1] = (IndexType)newIndex;
                 }
 
+                ++count;
+                ++Version;
+                
                 return newIndex;
             }
 
@@ -159,6 +163,86 @@ namespace BMBaseCore.Entities
             firstFree = 0;
             firstUsed = _capacity;
             ++Version;
+        }
+
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        /// <summary>
+        /// Enumerates the in-use slots of the pool.
+        /// </summary>
+        public struct Enumerator : IEnumerator<int>
+        {
+            private IndexPool _pool;
+            private int _current;
+            private int _next;
+            private int _iteratingVersion;
+
+            public Enumerator(IndexPool pool)
+            {
+                _pool = pool;
+                _current = -1;
+                _next = pool.firstUsed;
+                _iteratingVersion = pool.Version;
+            }
+
+            public int Current => _current;
+
+            object IEnumerator.Current => throw new NotImplementedException();
+
+            public void Dispose()
+            {
+                _pool = null;
+                _current = 0;
+                _next = 0;
+                _iteratingVersion = 0;
+            }
+
+            public bool MoveNext()
+            {
+                if ((_iteratingVersion == _pool.Version) && (_next < _pool._capacity))
+                {
+                    _current = _next;
+                    _next = _pool.indices[_next];
+                    return true;
+                }
+
+                return MoveNextRare();
+            }
+
+            internal bool MoveNextRare()
+            {
+                if (_iteratingVersion != _pool.Version)
+                {
+                    // If version has changed then we need to see if _next is now pointing to a free slot
+                    // i.e. negative index, and search forward for the next reserved slot.
+                    // Since we always iterate in-order, this works
+                    while ((_next < _pool._capacity) && (_pool.indices[_next] < 0))
+                    {
+                        ++_next;
+                    }
+
+                    // If we found a used slot then we can now do the default behaviour of MoveNext,as above.
+                    if (_next < _pool._capacity)
+                    {
+                        _current = _next;
+                        _next = _pool.indices[_next];
+
+                        return true;
+                    }
+                }
+
+                // Must be end of list
+                return false;
+            }
+
+            public void Reset()
+            {
+                _current = -1;
+                _next = _pool.firstUsed;
+            }
         }
     }
 }
