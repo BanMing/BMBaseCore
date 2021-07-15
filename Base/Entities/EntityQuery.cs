@@ -31,6 +31,8 @@ namespace BMBaseCore.Entities
             return this;
         }
 
+        #region Do Process
+
         /// <summary>
         /// Preform an actions on all entities matched by the query
         /// </summary>
@@ -68,6 +70,164 @@ namespace BMBaseCore.Entities
 
             return this;
         }
+
+        public EntityQuery<TEntity> Do<T1>(Action<Entity<TEntity>, T1> process, T1 p1)
+        {
+            IndexPool.Enumerator enumerator = _entitySystem.GetEntityIndexEnumerator();
+
+            // If we`re not excluding components ("HasNot") then use simpler bit test case within the loop
+            if (_hasNone == ComponentFlags.None)
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll))
+                    {
+                        process(_entitySystem.entities[index], p1);
+                    }
+                }
+            }
+            else
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll, _hasNone))
+                    {
+                        process(_entitySystem.entities[index], p1);
+                    }
+                }
+            }
+
+            return this;
+        }
+
+        public EntityQuery<TEntity> Do<T1, T2>(Action<Entity<TEntity>, T1, T2> process, T1 p1, T2 p2)
+        {
+            IndexPool.Enumerator enumerator = _entitySystem.GetEntityIndexEnumerator();
+
+            // If we`re not excluding components ("HasNot") then use simpler bit test case within the loop
+            if (_hasNone == ComponentFlags.None)
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll))
+                    {
+                        process(_entitySystem.entities[index], p1, p2);
+                    }
+                }
+            }
+            else
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll, _hasNone))
+                    {
+                        process(_entitySystem.entities[index], p1, p2);
+                    }
+                }
+            }
+
+            return this;
+        }
+
+        public EntityQuery<TEntity> Do<T1, T2, T3>(Action<Entity<TEntity>, T1, T2, T3> process, T1 p1, T2 p2, T3 p3)
+        {
+            IndexPool.Enumerator enumerator = _entitySystem.GetEntityIndexEnumerator();
+
+            // If we`re not excluding components ("HasNot") then use simpler bit test case within the loop
+            if (_hasNone == ComponentFlags.None)
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll))
+                    {
+                        process(_entitySystem.entities[index], p1, p2, p3);
+                    }
+                }
+            }
+            else
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll, _hasNone))
+                    {
+                        process(_entitySystem.entities[index], p1, p2, p3);
+                    }
+                }
+            }
+
+            return this;
+        }
+
+        public EntityQuery<TEntity> Do<T1, T2, T3, T4>(Action<Entity<TEntity>, T1, T2, T3, T4> process, T1 p1, T2 p2, T3 p3, T4 p4)
+        {
+            IndexPool.Enumerator enumerator = _entitySystem.GetEntityIndexEnumerator();
+
+            // If we`re not excluding components ("HasNot") then use simpler bit test case within the loop
+            if (_hasNone == ComponentFlags.None)
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll))
+                    {
+                        process(_entitySystem.entities[index], p1, p2, p3, p4);
+                    }
+                }
+            }
+            else
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll, _hasNone))
+                    {
+                        process(_entitySystem.entities[index], p1, p2, p3, p4);
+                    }
+                }
+            }
+
+            return this;
+        }
+
+        public EntityQuery<TEntity> Do<T1, T2, T3, T4, T5>(Action<Entity<TEntity>, T1, T2, T3, T4, T5> process, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5)
+        {
+            IndexPool.Enumerator enumerator = _entitySystem.GetEntityIndexEnumerator();
+
+            // If we`re not excluding components ("HasNot") then use simpler bit test case within the loop
+            if (_hasNone == ComponentFlags.None)
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll))
+                    {
+                        process(_entitySystem.entities[index], p1, p2, p3, p4, p5);
+                    }
+                }
+            }
+            else
+            {
+                while (enumerator.MoveNext())
+                {
+                    int index = enumerator.Current;
+                    if (_entitySystem.componentFlags[index].Matches(_hasAll, _hasNone))
+                    {
+                        process(_entitySystem.entities[index], p1, p2, p3, p4, p5);
+                    }
+                }
+            }
+
+            return this;
+        }
+
+        #endregion
+
         public Enumerator GetEnumerator()
         {
             return new Enumerator(this._entitySystem, _hasAll, _hasNone);

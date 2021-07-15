@@ -82,7 +82,7 @@ namespace BMBaseCore
             if (IsLogEnable)
             {
                 string newFormat = Utility.Text.Format("{0} : {1}", TypeName, format);
-                GameLog.Info(Utility.Text.Format(newFormat, args));
+                BMBaseCore.Log.Info(Utility.Text.Format(newFormat, args));
             }
         }
 
@@ -95,7 +95,7 @@ namespace BMBaseCore
         protected void LogError(string format, params object[] args)
         {
             string newFormat = Utility.Text.Format("{0} : {1}", TypeName, format);
-            GameLog.Error(Utility.Text.Format(newFormat, args));
+            BMBaseCore.Log.Error(Utility.Text.Format(newFormat, args));
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace BMBaseCore
         protected void LogWarning(string format, params object[] args)
         {
             string newFormat = Utility.Text.Format("{0} : {1}", TypeName, format);
-            GameLog.Warning(Utility.Text.Format(newFormat, args));
+            BMBaseCore.Log.Warning(Utility.Text.Format(newFormat, args));
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace BMBaseCore
         protected void WirteLog(string format, params object[] args)
         {
             string newFormat = Utility.Text.Format("{0} : {1}", TypeName, format);
-            GameLog.WriteLogToFile(Utility.Text.Format(newFormat, args));
+            BMBaseCore.Log.WriteLogToFile(Utility.Text.Format(newFormat, args));
         }
 
 

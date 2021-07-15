@@ -11,7 +11,7 @@ namespace BMBaseCore
         /// <summary>
         /// 游戏日志等级
         /// </summary>
-        public enum GameLogLevel : byte
+        public enum LogLevel : byte
         {
             /// <summary>
             /// 调试

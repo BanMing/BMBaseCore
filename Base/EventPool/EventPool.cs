@@ -150,7 +150,7 @@ namespace BMBaseCore
         {
             if (handler == null)
             {
-                GameLog.Error("Subscribe event {0} handler is null!", id.ToString());
+                Log.Error("Subscribe event {0} handler is null!", id.ToString());
             }
 
             LinkedList<EventHandler<T>> handlers = null;
@@ -162,11 +162,11 @@ namespace BMBaseCore
             }
             else if ((_eventPoolMode & EventPoolMode.AllowMultiHandler) == 0)
             {
-                GameLog.Error(Utility.Text.Format("Event '{0}' not allow multi handler.", id.ToString()));
+                Log.Error(Utility.Text.Format("Event '{0}' not allow multi handler.", id.ToString()));
             }
             else if ((_eventPoolMode & EventPoolMode.AllowDuplicateHandler) == 0 && Check(id, handler))
             {
-                GameLog.Error(Utility.Text.Format("Event '{0}' not allow duplicate handler.", id.ToString()));
+                Log.Error(Utility.Text.Format("Event '{0}' not allow duplicate handler.", id.ToString()));
             }
             else
             {
@@ -183,13 +183,13 @@ namespace BMBaseCore
         {
             if (handler == null)
             {
-                GameLog.Error("Unsubscribe event {0} handler is null!", id.ToString());
+                Log.Error("Unsubscribe event {0} handler is null!", id.ToString());
             }
 
             LinkedList<EventHandler<T>> handlers = null;
             if (!_eventHandlers.TryGetValue(id, out handlers))
             {
-                GameLog.Error("event {0} doesn`t have any handler!", id.ToString());
+                Log.Error("event {0} doesn`t have any handler!", id.ToString());
             }
 
             if (_cachedNodes.Count > 0)
@@ -215,7 +215,7 @@ namespace BMBaseCore
 
             if (!handlers.Remove(handler))
             {
-                GameLog.Error("Event '{0}' not exists specified handler.", id.ToString());
+                Log.Error("Event '{0}' not exists specified handler.", id.ToString());
             }
 
         }
@@ -289,7 +289,7 @@ namespace BMBaseCore
 
             if (noHandleException)
             {
-                GameLog.Error("Event '{0}' not allow no handler.", eventId.ToString());
+                Log.Error("Event '{0}' not allow no handler.", eventId.ToString());
             }
         }
 

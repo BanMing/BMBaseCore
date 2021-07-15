@@ -19,7 +19,7 @@ namespace BMBaseCore
         /// </summary>
         /// <param name="level">日志等级</param>
         /// <param name="message">日志内容</param>
-        void Log(GameLogLevel level, object message);
+        void Log(LogLevel level, object message);
 
         /// <summary>
         /// 将日志内容写入本地文件
