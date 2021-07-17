@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace BMBaseCore.Entities
+namespace BMBaseCore.ECS
 {
     // Singed integer;negatives are used to indicate free slots.
     using IndexType = Int16;
@@ -17,10 +17,10 @@ namespace BMBaseCore.Entities
         /// <summary>
         /// Array of indices stores linked list of free and linked list of used nodes.
         /// </summary>
-        protected readonly IndexType[] indices;
-        protected IndexType count;
-        protected IndexType firstFree;
-        protected IndexType firstUsed;
+        private readonly IndexType[] indices;
+        private IndexType count;
+        private IndexType firstFree;
+        private IndexType firstUsed;
 
         /// <summary>
         /// Used for change detection while iterating.

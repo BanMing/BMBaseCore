@@ -1,43 +1,43 @@
 ﻿using System;
 
-namespace BMBaseCore.Entities
+namespace BMBaseCore.ECS
 {
-    public struct ComponentId<TEntity, TComponent> : IEquatable<ComponentId<TEntity, TComponent>>
+    public struct ComponentID<TEntity, TComponent> : IEquatable<ComponentID<TEntity, TComponent>>
         where TEntity : EntityType
         where TComponent : class
     {
-        public static readonly ComponentId<TEntity, TComponent> None = new ComponentId<TEntity, TComponent>(-1);
+        public static readonly ComponentID<TEntity, TComponent> None = new ComponentID<TEntity, TComponent>(-1);
 
         internal readonly Int16 ComponentIndex;
 
-        internal ComponentId(int componentIndex)
+        internal ComponentID(int componentIndex)
         {
             ComponentIndex = (Int16)componentIndex;
         }
 
         #region IEquatable and friends
 
-        public bool Equals(ComponentId<TEntity, TComponent> other)
+        public bool Equals(ComponentID<TEntity, TComponent> other)
         {
             return (ComponentIndex == other.ComponentIndex);
         }
 
-        public bool Equals<TOtherComponent>(ComponentId<TEntity, TOtherComponent> other) where TOtherComponent : class
+        public bool Equals<TOtherComponent>(ComponentID<TEntity, TOtherComponent> other) where TOtherComponent : class
         {
             return ComponentIndex == other.ComponentIndex;
         }
 
         public override bool Equals(object obj)
         {
-            return (obj is ComponentId<TEntity, TComponent>) && Equals((ComponentId<TEntity, TComponent>)obj);
+            return (obj is ComponentID<TEntity, TComponent>) && Equals((ComponentID<TEntity, TComponent>)obj);
         }
 
-        public static bool operator ==(ComponentId<TEntity, TComponent> a, ComponentId<TEntity, TComponent> b)
+        public static bool operator ==(ComponentID<TEntity, TComponent> a, ComponentID<TEntity, TComponent> b)
         {
             return a.ComponentIndex == b.ComponentIndex;
         }
 
-        public static bool operator !=(ComponentId<TEntity, TComponent> a, ComponentId<TEntity, TComponent> b)
+        public static bool operator !=(ComponentID<TEntity, TComponent> a, ComponentID<TEntity, TComponent> b)
         {
             return a.ComponentIndex != b.ComponentIndex;
         }

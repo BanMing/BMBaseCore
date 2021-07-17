@@ -262,10 +262,10 @@ namespace BMBaseCore
         /// <param name="e"></param>
         private void HandleEvent(object sender, T e)
         {
-            int eventId = e.Id;
+            int eventID = e.ID;
             bool noHandleException = false;
             LinkedList<EventHandler<T>> handlers = null;
-            if (_eventHandlers.TryGetValue(eventId, out handlers) && handlers.Count > 0)
+            if (_eventHandlers.TryGetValue(eventID, out handlers) && handlers.Count > 0)
             {
                 LinkedListNode<EventHandler<T>> current = handlers.First;
                 while (current != null)
@@ -289,7 +289,7 @@ namespace BMBaseCore
 
             if (noHandleException)
             {
-                Log.Error("Event '{0}' not allow no handler.", eventId.ToString());
+                Log.Error("Event '{0}' not allow no handler.", eventID.ToString());
             }
         }
 

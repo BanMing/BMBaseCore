@@ -60,7 +60,7 @@ namespace BMBaseCore
 
         #region Life Cycle
 
-        public virtual void Init() { }
+        public virtual void Initialize() { }
 
         public virtual void Destroy()
         {

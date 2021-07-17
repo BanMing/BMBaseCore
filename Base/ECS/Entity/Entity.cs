@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BMBaseCore.Entities
+namespace BMBaseCore.ECS
 {
     public struct Entity<TEntity> : IComparable<Entity<TEntity>>, IEquatable<Entity<TEntity>> where TEntity : EntityType
     {
@@ -28,27 +28,27 @@ namespace BMBaseCore.Entities
         internal readonly Int16 Index;
 
         /// <summary>
-        /// Holds enough of the CreationId for validation checks
+        /// Holds enough of the CreationID for validation checks
         /// </summary>
-        internal readonly UInt16 CreationIdCheck;
+        internal readonly UInt16 CreationIDCheck;
 
-        internal Entity(Int16 index, UInt16 creationId)
+        internal Entity(Int16 index, UInt16 creationID)
         {
             Index = index;
-            CreationIdCheck = creationId;
+            CreationIDCheck = creationID;
         }
 
         public int ToReference()
         {
-            int entityReference = (Index << 16) | CreationIdCheck;
+            int entityReference = (Index << 16) | CreationIDCheck;
             return entityReference;
         }
 
         public static Entity<TEntity> FromReference(int entityReference)
         {
             short index = (short)(entityReference >> 16);
-            ushort creationIdCheck = (ushort)(entityReference & 0xffff);
-            return new Entity<TEntity>(index, creationIdCheck);
+            ushort creationIDCheck = (ushort)(entityReference & 0xffff);
+            return new Entity<TEntity>(index, creationIDCheck);
         }
 
         public override string ToString()
@@ -58,7 +58,7 @@ namespace BMBaseCore.Entities
                 return "None";
             }
 
-            string entityString = $"[Index={Index},CreationId={CreationIdCheck}]";
+            string entityString = $"[Index={Index},CreationID={CreationIDCheck}]";
             
             return entityString;
         }
@@ -72,7 +72,7 @@ namespace BMBaseCore.Entities
 
         public bool Equals(Entity<TEntity> other)
         {
-            return (Index == other.Index) && (CreationIdCheck == other.CreationIdCheck);
+            return (Index == other.Index) && (CreationIDCheck == other.CreationIDCheck);
         }
 
         public override bool Equals(object obj)
@@ -82,17 +82,17 @@ namespace BMBaseCore.Entities
 
         public static bool operator ==(Entity<TEntity> a, Entity<TEntity> b)
         {
-            return (a.Index == b.Index) && (a.CreationIdCheck == b.CreationIdCheck);
+            return (a.Index == b.Index) && (a.CreationIDCheck == b.CreationIDCheck);
         }
 
         public static bool operator !=(Entity<TEntity> a, Entity<TEntity> b)
         {
-            return (a.Index != b.Index) || (a.CreationIdCheck != b.CreationIdCheck);
+            return (a.Index != b.Index) || (a.CreationIDCheck != b.CreationIDCheck);
         }
 
         public override int GetHashCode()
         {
-            return (Index << 16) | CreationIdCheck;
+            return (Index << 16) | CreationIDCheck;
         }
 
         #endregion

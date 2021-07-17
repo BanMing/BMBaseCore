@@ -44,7 +44,7 @@ namespace BMBaseCore
         /// </summary>
         public AssetBundleLoader()
         {
-            base.Init();
+            base.Initialize();
 
             _loadingAsset = new Dictionary<int, AsyncLoadTask>();
             _curAllBundleInfos = new Dictionary<int, AssetBundleInfo>();

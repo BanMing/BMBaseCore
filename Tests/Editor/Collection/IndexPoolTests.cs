@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using BMBaseCore.Entities;
+using BMBaseCore.ECS;
 using System;
 
 namespace Tests

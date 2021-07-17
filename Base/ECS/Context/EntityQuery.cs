@@ -2,30 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace BMBaseCore.Entities
+namespace BMBaseCore.ECS
 {
     using ComponentFlags = BMBaseCore.Collections.BoolArray128;
 
     public struct EntityQuery<TEntity> : IEnumerable<Entity<TEntity>> where TEntity : EntityType
     {
-        private readonly EntitySystem<TEntity> _entitySystem;
+        private readonly EntityContext<TEntity> _entitySystem;
         private ComponentFlags _hasAll;
         private ComponentFlags _hasNone;
 
-        internal EntityQuery(EntitySystem<TEntity> entitySystem)
+        internal EntityQuery(EntityContext<TEntity> entitySystem)
         {
             _entitySystem = entitySystem;
             _hasAll = default(ComponentFlags);
             _hasNone = default(ComponentFlags);
         }
 
-        public EntityQuery<TEntity> Has<TComponent>(ComponentId<TEntity, TComponent> id) where TComponent : class
+        public EntityQuery<TEntity> Has<TComponent>(ComponentID<TEntity, TComponent> id) where TComponent : class
         {
             _hasAll[id.ComponentIndex] = true;
             return this;
         }
 
-        public EntityQuery<TEntity> HasNot<TComponent>(ComponentId<TEntity, TComponent> id) where TComponent : class
+        public EntityQuery<TEntity> HasNot<TComponent>(ComponentID<TEntity, TComponent> id) where TComponent : class
         {
             _hasNone[id.ComponentIndex] = true;
             return this;
@@ -245,7 +245,7 @@ namespace BMBaseCore.Entities
 
         public struct Enumerator : IEnumerator<Entity<TEntity>>
         {
-            private EntitySystem<TEntity> _entitySystem;
+            private EntityContext<TEntity> _entitySystem;
             private IndexPool.Enumerator _entityIndexEnumerator;
             private Entity<TEntity> _current;
             private ComponentFlags _hasAll;
@@ -255,7 +255,7 @@ namespace BMBaseCore.Entities
 
             object IEnumerator.Current => throw new NotImplementedException();
 
-            internal Enumerator(EntitySystem<TEntity> entitySystem, ComponentFlags hasAll, ComponentFlags hasNone)
+            internal Enumerator(EntityContext<TEntity> entitySystem, ComponentFlags hasAll, ComponentFlags hasNone)
             {
                 _entitySystem = entitySystem;
                 _entityIndexEnumerator = entitySystem.GetEntityIndexEnumerator();

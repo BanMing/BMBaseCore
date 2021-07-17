@@ -19,7 +19,7 @@ namespace BMBaseCore
         {
             static Nest()
             {
-                instance.Init();
+                instance.Initialize();
             }
             internal static readonly T instance = Activator.CreateInstance<T>();
         }

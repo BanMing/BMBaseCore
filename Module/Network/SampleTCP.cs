@@ -278,8 +278,8 @@ namespace BMBaseCore
             //int msglen = message.Length;
 
             // ByteBuffer buffer = new ByteBuffer (message);
-            // int mainId = buffer.ReadShort ();
-            // NetworkManager.AddEvent (mainId, buffer);
+            // int mainID = buffer.ReadShort ();
+            // NetworkManager.AddEvent (mainID, buffer);
         }
 
         // 会话发送
