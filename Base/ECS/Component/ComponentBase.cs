@@ -19,5 +19,17 @@ namespace BMBaseCore.ECS
     {
         public static ComponentID<TEntity, TComponent> ComponentID { get { return _componentID; } }
         private static ComponentID<TEntity, TComponent> _componentID = ComponentID<TEntity, TComponent>.None;
+
+        protected static void InitializeComponentID(EntityContext<TEntity> entityContext)
+        {
+            Assert.Debug(_componentID == ComponentID<TEntity, TComponent>.None, $"Component type {Utility.Reflection.GetType<TComponent>.kFullName}");
+            _componentID = entityContext.RegisterComponentType<TComponent>();
+        }
+
+        protected static void ShutdownComponentID() {
+
+            Assert.Debug(_componentID != ComponentID<TEntity, TComponent>.None,$"Non-initialized component type {Utility.Reflection.GetType<TComponent>.kFullName} is being shutdown!");
+            _componentID = ComponentID<TEntity, TComponent>.None;
+        }
     }
 }

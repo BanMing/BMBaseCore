@@ -162,16 +162,38 @@ namespace BMBaseCore.ECS
             return (index + creationID != 0) && (creationID == entities[index].CreationIDCheck);
         }
 
+        public EntityQuery<TEntity> Query()
+        {
+            return new EntityQuery<TEntity>(this);
+        }
+
         #endregion
 
         #region Component Operation
-        public ComponentID<TEntity, TComponent> AddComponent<TComponent>() where TComponent : class
+        public ComponentID<TEntity, TComponent> RegisterComponentType<TComponent>() where TComponent : class
         {
+            _threadAffinity.Validate();
+
             Assert.Debug(_componentCount < _maxComponentsPerEntity, "max component count exceeded");
             int component = _componentCount++;
             var id = new ComponentID<TEntity, TComponent>(component);
 
             return id;
+        }
+
+        public void AddComponent<TComponent>(Entity<TEntity> entity, ComponentID<TEntity, TComponent> id, TComponent component) where TComponent : class
+        {
+            _threadAffinity.Validate();
+
+            Assert.Debug(IsValid(entity), $"Invalid entity: Index: {entity.Index} CreationID: {entity.CreationIDCheck}");
+            Assert.Debug((ushort)id.ComponentIndex < _maxComponentsPerEntity, "Component index out of range");
+            Assert.Debug(!HasCommponent(entity, id), $"Entity already has component {Utility.Reflection.GetType<TComponent>.kFullName}");
+
+            int entityIndex = entity.Index;
+            int componentIndex = id.ComponentIndex;
+            int offset = entityIndex * _maxComponentsPerEntity + componentIndex;
+
+            componentFlags[entityIndex][componentIndex] = true;
         }
 
         public TComponent GetComponent<TComponent>(Entity<TEntity> entity, ComponentID<TEntity, TComponent> id) where TComponent : class
@@ -224,12 +246,12 @@ namespace BMBaseCore.ECS
 
         }
 
-        public bool HasCommponent<TComponent>(Entity<TEntity> entity, ComponentID<TEntity, TComponent>id) where TComponent : class
+        public bool HasCommponent<TComponent>(Entity<TEntity> entity, ComponentID<TEntity, TComponent> id) where TComponent : class
         {
             _threadAffinity.Validate();
 
             Assert.Debug((ushort)id.ComponentIndex < _maxComponentsPerEntity, "Component index out of range");
-            
+
             int entityIndex = entity.Index;
             int componentIndex = id.ComponentIndex;
 

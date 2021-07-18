@@ -25,7 +25,21 @@ namespace BMBaseCore.ECS
             where TEntity : EntityType
             where TComponent : class
         {
-            EntityContext<TEntity>.Instance.RemoveComponent(entity, componentID);
+            EntityContext<TEntity>.Instance.AddComponent(entity, componentID, component);
+        }
+
+        public static void RemoveComponent<TEnity, TComponent>(this Entity<TEnity> entity, ComponentID<TEnity, TComponent> componentID)
+            where TEnity : EntityType
+            where TComponent : class
+        {
+            EntityContext<TEnity>.Instance.RemoveComponent(entity, componentID);
+        }
+
+        public static void HasComponent<TEntity, TComponent>(this Entity<TEntity> entity, ComponentID<TEntity, TComponent> componentID)
+            where TEntity : EntityType
+            where TComponent : class
+        {
+            EntityContext<TEntity>.Instance.HasCommponent(entity,componentID);
         }
     }
 }
